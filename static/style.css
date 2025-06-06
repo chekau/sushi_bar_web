@@ -1,0 +1,61 @@
+body {
+    display: flex;
+    justify-content: center;
+    background-color: rgb(242, 242, 242);
+    padding-left: 0;
+    margin: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.header_button {
+    height: 30px;
+    width: auto;
+    background-color: red;
+    
+    padding: 5px;
+    text-decoration: none;
+    font-size: 20px;
+    margin-right: 15px;
+    min-width: 200px;
+    text-align: center;
+
+}
+
+
+
+.add_menu_form{
+    background-color: whitesmoke;
+    border-radius: 10px;
+    padding: 20px;
+    width: 500px;
+}
+
+.add_menu_form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.add_menu_form textarea {
+    border: 1px lightgray solid;
+    border-radius: 5px;
+    width: 100%;
+    height: 150px;
+    resize: vertical;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif
+}
+
+.add_menu_form input[type="text"],
+.add_menu_form input[type="file"]
+.add_menu_form input[type="password"] {
+    width: 100%;
+    border: 1px lightgray solid;
+    border-radius: 5px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif
+}
+
+.add_menu_form button {
+    cursor: pointer;
+    padding: 5px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
