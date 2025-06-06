@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Добавление блюда</title>
+</head>
+<body>
+    <h1>добавить блюдо</h1>
+    
+
+    <form 
+    action="{{  url_for(add_menu) }}"
+    method="post"
+    enctype="multipart/form-data"
+    class="add_menu_form"
+    >
+
+    <div class="form_group">
+        <label for="name">Название блюда</label>
+        <input type="name" id="name" required>
+    </div>
+    
+    <div class="form_group">
+        <label for="describtion">Описание блюда</label>
+        <input type="describtion" id="describtion" required>
+    </div>
+    
+    <div class="form_group">
+        <label for="image">Изображение блюда</label>
+        <input type="image" id="image" required>
+    </div>
+
+    <div class="form_group">
+        <label for="price">Цена блюда</label>
+        <input type="price" id="price" required>
+    </div>
+    
+
+    <button type="submit">Добавить блюдо</button>
+    
+
+    
+    </form>
+</body>
+</html>
