@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{  url_for('static',filename='style.css')  }}">
     <title>Добавление блюда</title>
 </head>
 <body>
@@ -27,9 +28,9 @@
     </div>
     
     <div class="form_group">
-        <label for="image">Изображение блюда</label>
-        <input type="image" id="image" required>
-    </div>
+            <label for="photo">Изображение блюда</label>
+            <input type="file" id="photo" name="photo" accept=".jpeg, .jpg, .png"> 
+        </div>
 
     <div class="form_group">
         <label for="price">Цена блюда</label>

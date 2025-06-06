@@ -18,7 +18,7 @@ class Database:
 
     @staticmethod
     def create_tables():
-        
+
         with open(Database.schema_path) as schema_file:
             sql_code = schema_file.read()
             conn = sqlite3.connect(Database.db_path)
@@ -30,9 +30,6 @@ class Database:
     
     @staticmethod
     def save(dish: Dish):
-        # if Database.find_article_by_title(article.title) is not None:
-        #      return False
-
 
         Database.execute(f"""
          INSERT INTO Dish (name, description, image, price) VALUES (?, ?, ?, ?)

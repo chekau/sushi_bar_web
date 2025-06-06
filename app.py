@@ -19,6 +19,8 @@ app.config["UPLOAD_FOLDER"] = "uploads/"
 
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
+Database.create_tables()
+
 
 @app.route("/add_menu", methods=["GET", "POST"])
 def add_menu():
