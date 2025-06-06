@@ -1,6 +1,6 @@
 import sqlite3
 import hashlib
-
+from dish import Dish
 
 class Database:
     db_path = "database.db"
@@ -16,3 +16,13 @@ class Database:
         conn.commit()
 
     
+    @staticmethod
+    def save(dish: Dish):
+        # if Database.find_article_by_title(article.title) is not None:
+        #      return False
+
+
+        Database.execute(f"""
+         INSERT INTO Dish (name, description, image, price) VALUES (?, ?, ?, ?)
+         """, (dish.name, dish.description, dish.image, dish.price))
+        return True
