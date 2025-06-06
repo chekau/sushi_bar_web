@@ -16,6 +16,11 @@ app.config["UPLOAD_FOLDER"] = "uploads/"
 
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
+@app.route("/")
+@app.route("/menu")
+def menu():
+    return render_template("menu.html")
+
 
 
 
