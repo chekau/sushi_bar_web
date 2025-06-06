@@ -15,6 +15,18 @@ class Database:
  
         conn.commit()
 
+
+    @staticmethod
+    def create_tables():
+        
+        with open(Database.schema_path) as schema_file:
+            sql_code = schema_file.read()
+            conn = sqlite3.connect(Database.db_path)
+
+            cursor = conn.cursor()
+            cursor.executescript(sql_code)
+
+            conn.commit()
     
     @staticmethod
     def save(dish: Dish):
