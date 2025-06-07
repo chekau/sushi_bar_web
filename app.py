@@ -9,7 +9,7 @@ from flask import (
     flash,
     session)
 import os
-from database import Database
+from database import Database, DishTable
 from dish import Dish
 
 
@@ -19,7 +19,7 @@ app.config["UPLOAD_FOLDER"] = "uploads/"
 
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
-Database.create_tables()
+
 
 
 @app.route("/add_menu", methods=["GET", "POST"])
@@ -42,11 +42,16 @@ def add_menu():
 
     else:
         image_path = None
-    saved = Database.save(Dish(name=name, description=description, image=image_path, price=price))
+    Database.open(
+            host='109.206.169.221', 
+            user='seschool_01', 
+            password='seschool_01', 
+            database='seschool_01_pks1')
 
-    if not saved:
-        return redirect(url_for('add_menu', error=True))
-    return redirect(url_for('registration'))
+    
+    DishTable.add(name, description, image, price)
+    return redirect(url_for('add_menu', error=True))
+    
 
 
 
