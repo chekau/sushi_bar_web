@@ -1,47 +1,46 @@
-import sqlite3
-import hashlib
+import mysql.connector
 from dish import Dish
 
-class Database:
-    db_path = "database.db"
-    schema_path = "schema.sql"
-
-    @staticmethod
-    def execute(sql_code: str, params: tuple = ()):
-        conn = sqlite3.connect(Database.db_path)
-
-        cursor = conn.cursor()
-        cursor.execute(sql_code, params)
- 
-        conn.commit()
-
-
-    @staticmethod
-    def create_tables():
-
-        with open(Database.schema_path) as schema_file:
-            sql_code = schema_file.read()
-            conn = sqlite3.connect(Database.db_path)
-
-            cursor = conn.cursor()
-            cursor.executescript(sql_code)
-
-            conn.commit()
+connection = mysql.connector.connect(
     
-    @staticmethod
-    def save(dish: Dish):
+    host='109.206.169.221',
+    user='seschool_01',
+    password='seschool_01',
+    database='seschool_01_pks1'
+)
 
-        Database.execute(f"""
-         INSERT INTO Dish (name, description, image, price) VALUES (?, ?, ?, ?)
-         """, (dish.name, dish.description, dish.image, dish.price))
-        return True
-    
-    
-    @staticmethod
-    def fetchall(sql_code: str,params: tuple =()):
-        conn = sqlite3.connect(Database.db_path)
-         
-        cursor = conn.cursor()
-        cursor.execute(sql_code,params)
- 
-        return cursor.fetchall()
+class Database: 
+    __conection = None
+    @classmethod
+    def open(cls, 
+             host='109.206.169.221', 
+             user='seschool_01', 
+             password='seschool_01', 
+             database='seschool_01_pks1'):
+        if cls.__conection is None:
+            cls.__conection = mysql.connector.connect(
+                user=user,
+                password=password,
+                host=host,
+                database=database   
+            )
+
+            cls.__cursor = cls.__conection.cursor()
+    @classmethod
+    def query(cls, sql, values):
+
+        cls.__cursor.execute(sql,values)
+        cls.__conection.commit()
+        result = cls.__cursor.fetchall()
+        return result   
+    @classmethod
+    def close(cls):
+        cls.__conection.close()
+
+class Dish:
+    @classmethod
+    def add(cls,name, describtion, image, price):
+        sql = "INSERT INTO Dish (`name`, `describtion`, `image`, `price`) VALUE (%s,%s,%s,%s)"
+        values = (name, describtion, image, price)
+        Database.query(sql,values)
+
