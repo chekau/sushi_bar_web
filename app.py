@@ -29,7 +29,7 @@ def add_menu():
     
     # Далее обработка POST-запроса
     name = request.form.get("name")
-    description = request.form.get("description")
+    describtion = request.form.get("describtion")
     image = request.files.get("image")
     price = request.form.get("price")
     
@@ -49,29 +49,26 @@ def add_menu():
             database='seschool_01_pks1')
 
     
-    DishTable.add(name, description, image, price)
+    DishTable.add(name, describtion, image, price)
+   
     return redirect(url_for('add_menu', error=True))
     
 
 
 
-@staticmethod
-def get_all_dishes():
-    dishes = []
-        
 
-    for (name,describtion,image,price) in Database.fetchall(
 
-    "SELECT * FROM dishes"):
-        dishes.append(Dish(
-            name=name,
-            description=describtion,
-            image=image,
-            price=price   
-    ))
 
-    return dishes
-     
+@app.route("/menu")
+def menu():
+    dishes = DishTable.get_all_dishes()
+    count_in_group = 3
+
+    groups = []
+    for i in range(0,len(dishes),count_in_group):
+        groups.append(dishes[i:i + count_in_group])
+    
+    return render_template("menu.html",groups=groups,user_count=DishTable.get_count_of_users())
 
 @app.route("/")
 @app.route("/registration")
@@ -85,10 +82,6 @@ def client_side():
 @app.route("/admin_side")
 def admin_side():
     return render_template("admin_side.html")
-
-@app.route("/menu")
-def menu():
-    return render_template("menu.html")
 
 
 app.run(debug=True, port=8080)
