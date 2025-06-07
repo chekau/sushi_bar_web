@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{  url_for('static',filename='style.css')  }}">
     <title>Menu</title>
 </head>
 <body>
@@ -13,16 +14,23 @@
         <div class="dish_body">
 
             <div class="dish_name">
-                чикен ролл
+                <h1>{{dish.name}}</h1>
             </div>    
 
-            <div class="dish_image">
-            
+            <div class="dish_describtion">
+                <h1>{{dish.describtion}}</h1>
             </div>
 
-            <div class="dish_content">
-            
+            <div class="dish_image">
+                <h1>{{dish.image}}</h1>
             </div>
+
+            
+
+            <div class="dish_price">
+                <h1>{{dish.price}}</h1>
+            </div>
+            
         
         </div>
     

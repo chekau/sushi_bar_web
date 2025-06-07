@@ -46,13 +46,24 @@ def add_menu():
 
     if not saved:
         return redirect(url_for('add_menu', error=True))
-    return redirect(url_for('index'))
-
+    return redirect(url_for('registration'))
 
 @app.route("/")
-@app.route("/index")
-def index():
-    return render_template("index.html")
+@app.route("/registration")
+def registration():
+    return render_template("registration.html")
+
+@app.route("/client_side")
+def client_side():
+    return render_template("client_side.html")
+
+@app.route("/admin_side")
+def admin_side():
+    return render_template("admin_side.html")
+
+@app.route("/menu")
+def menu():
+    return render_template("menu.html")
 
 
 app.run(debug=True, port=8080)

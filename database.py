@@ -35,3 +35,13 @@ class Database:
          INSERT INTO Dish (name, description, image, price) VALUES (?, ?, ?, ?)
          """, (dish.name, dish.description, dish.image, dish.price))
         return True
+    
+    
+    @staticmethod
+    def fetchall(sql_code: str,params: tuple =()):
+        conn = sqlite3.connect(Database.db_path)
+         
+        cursor = conn.cursor()
+        cursor.execute(sql_code,params)
+ 
+        return cursor.fetchall()
