@@ -32,15 +32,48 @@ class Database:
         cls.__cursor.execute(sql,values)
         cls.__conection.commit()
         result = cls.__cursor.fetchall()
-        return result   
+        return result
+       
+
+    
+    
     @classmethod
     def close(cls):
         cls.__conection.close()
 
-class Dish:
+    
+
+class DishTable:
     @classmethod
     def add(cls,name, describtion, image, price):
         sql = "INSERT INTO Dish (`name`, `describtion`, `image`, `price`) VALUE (%s,%s,%s,%s)"
         values = (name, describtion, image, price)
         Database.query(sql,values)
+
+    @staticmethod
+    def get_count_of_users():
+        count = Database.query(
+            "SELECT COUNT(*) FROM users"
+            )[0][0]        
+        return count
+
+
+    @staticmethod
+    def get_all_dishes():
+        dishes = []
+        
+
+        for (name,describtion,image,price) in Database.query(
+
+        "SELECT * FROM dishes"):
+            dishes.append(Dish(
+            name=name,
+            describtion=describtion,
+            image=image,
+            price=price   
+    ))
+
+        return dishes
+
+     
 
