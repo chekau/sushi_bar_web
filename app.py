@@ -48,6 +48,26 @@ def add_menu():
         return redirect(url_for('add_menu', error=True))
     return redirect(url_for('registration'))
 
+
+
+@staticmethod
+def get_all_dishes():
+    dishes = []
+        
+
+    for (name,describtion,image,price) in Database.fetchall(
+
+    "SELECT * FROM dishes"):
+        dishes.append(Dish(
+            name=name,
+            description=describtion,
+            image=image,
+            price=price   
+    ))
+
+    return dishes
+     
+
 @app.route("/")
 @app.route("/registration")
 def registration():
