@@ -61,8 +61,14 @@ def add_menu():
 
 @app.route("/menu")
 def menu():
+    Database.open(
+            host='109.206.169.221', 
+            user='seschool_01', 
+            password='seschool_01', 
+            database='seschool_01_pks1')
+
     dishes = DishTable.get_all_dishes()
-    count_in_group = 3
+    count_in_group = 5
 
     groups = []
     for i in range(0,len(dishes),count_in_group):
@@ -82,6 +88,10 @@ def client_side():
 @app.route("/admin_side")
 def admin_side():
     return render_template("admin_side.html")
+
+@app.route('/uploads/<filename>')
+def uploaded_photo(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 
 app.run(debug=True, port=8080)

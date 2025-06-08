@@ -34,7 +34,14 @@ class Database:
         result = cls.__cursor.fetchall()
         return result
        
+    @classmethod
+    def fetchall(cls, sql, params: tuple = ()):
 
+        cls.__cursor.execute(sql,params)
+        
+        result = cls.__cursor.fetchall()
+        return result
+    
     
     
     @classmethod
@@ -52,8 +59,8 @@ class DishTable:
 
     @staticmethod
     def get_count_of_users():
-        count = Database.query(
-            "SELECT COUNT(*) FROM users"
+        count = Database.fetchall(
+            "SELECT COUNT(*) FROM Dish"
             )[0][0]        
         return count
 
@@ -63,9 +70,9 @@ class DishTable:
         dishes = []
         
 
-        for (name,describtion,image,price) in Database.query(
+        for (name,describtion,image,price) in Database.fetchall(
 
-        "SELECT * FROM dishes"):
+        "SELECT * FROM Dish"):
             dishes.append(Dish(
             name=name,
             describtion=describtion,
