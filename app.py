@@ -10,7 +10,7 @@ from flask import (
     session)
 import os
 from database import Database, DishTable
-from dish import Dish
+from model import Dish
 
 
 app = Flask(__name__)
@@ -34,8 +34,8 @@ def add_menu():
     price = request.form.get("price")
     
     
-    if image is not None and image.filename: 
-        image_path = image.filename
+    if image is not None: 
+        image_path = image
         print(app.config["UPLOAD_FOLDER"] + image_path)
         image.save(app.config["UPLOAD_FOLDER"] + image_path)
         
@@ -58,9 +58,9 @@ def add_menu():
 
 
 
-
-@app.route("/menu")
-def menu():
+@app.route("/")
+@app.route("/index")
+def index():
     Database.open(
             host='109.206.169.221', 
             user='seschool_01', 
@@ -74,12 +74,12 @@ def menu():
     for i in range(0,len(dishes),count_in_group):
         groups.append(dishes[i:i + count_in_group])
     
-    return render_template("menu.html",groups=groups,user_count=DishTable.get_count_of_users())
+    return render_template("index.html",groups=groups,user_count=DishTable.get_count_of_users())
 
-@app.route("/")
-@app.route("/registration")
-def registration():
-    return render_template("registration.html")
+
+@app.route("/choose")
+def choose():
+    return render_template("choose.html")
 
 @app.route("/client_side")
 def client_side():
@@ -89,9 +89,84 @@ def client_side():
 def admin_side():
     return render_template("admin_side.html")
 
-@app.route('/uploads/<filename>')
-def uploaded_photo(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+
+@app.route("/dish")
+def dish():
+    return render_template("dish.html")
+
+@app.route("/uploads/<image>")
+def uploaded_photo(image):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], image)
+
+
+@app.route("/register",methods=["GET","POST"])
+def register():
+    if request.method == "GET":
+        return render_template("register.html")
+    
+
+    username = request.form.get("username")
+    email = request.form.get("email")
+    password = request.form.get("password")
+    repeat_password = request.form.get("repeat_password")
+
+    if not username:
+        flash("имя пользователя не может быть пустым")
+        return redirect(request.url)
+
+    
+    if not email:
+        flash("электронная почта не может быть пустым")
+        return redirect(request.url)
+
+
+    
+    if not password:
+        flash("повторите пароль")
+        return redirect(request.url)
+    
+    print(password)
+    print(repeat_password)
+    
+    if password != repeat_password:
+        flash("пароли не совпадают")
+        return redirect(request.url)
+
+    saved = Database.register_user(username,email,password)
+    if not saved:
+        flash("пользователь с таким никнеймом или почтой уже есть")
+        return redirect(request.url)
+    
+    
+    return redirect(url_for("login"))
+
+@app.route("/login",methods=["POST","GET"])
+def login():
+    if request.method == "GET":
+        return render_template("login.html")
+
+
+    #POST ЗАПРОС
+
+    username = request.form.get("username")
+    password = request.form.get("password")
+
+    if not Database.can_be_logged_in(username,password):
+        flash("такого пользователя не существует или неверный пароль")
+        return redirect(request.url)
+    
+
+    session['user_id'] = Database.find_user_id_by_name(username)
+    return redirect(url_for("index"))
+
+@app.route("/logout", methods=["POST"])
+def logout():
+    if "user_id" in session:
+        session.clear()
+    return redirect(url_for("index"))
+
+
 
 
 app.run(debug=True, port=8080)

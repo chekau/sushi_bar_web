@@ -1,5 +1,6 @@
 import mysql.connector
-from dish import Dish
+from model import Dish
+import hashlib
 
 connection = mysql.connector.connect(
     
@@ -47,6 +48,47 @@ class Database:
     @classmethod
     def close(cls):
         cls.__conection.close()
+
+    @staticmethod
+    def register_user(username,email,password):
+        #есть ли пользователи у которых уже указан такой никнейм или электронная почта
+        users = Database.fetchall(
+             "SELECT * FROM Users WHERE username = ? OR email = ?",
+             [username, email]
+         )
+        print(users)
+        if users:
+            return False
+         
+        password_hash = hashlib.md5(password.encode()).hexdigest()
+
+        Database.execute("INSERT INTO Users (username, email, password_hash)"
+                          "VALUES (?,?,?)",
+                          [username,email,password_hash]
+        )
+        return True
+
+    @staticmethod
+    def can_be_logged_in(user_or_email: str, password: str):
+        # 1. Проверить, что пользователь с таким именем или электронной почтой есть
+        users = Database.fetchall(
+            "SELECT * FROM Users WHERE username = ? OR email = ?",
+            [user_or_email, user_or_email]
+        )
+        if not users:
+            return False
+        
+        # 2. Берем хэш-пароля заданного пользователя
+        # users = [ (1, "nnn", "nnn@ayndex.ru", "asfksdhfihsiuh523454534jh534kjkhk34j534") ]
+        user = users[0]
+        real_password_hash = user[3]
+
+        # 3. Сравниваем хэш хранящийся в базе данных и хэш пароля,
+        # который попытались ввести
+        password_hash = hashlib.md5( password.encode() ).hexdigest()
+        if real_password_hash != password_hash:
+            return False
+        return True
 
     
 

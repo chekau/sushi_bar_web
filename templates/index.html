@@ -10,24 +10,35 @@
     <div class="main">
     
         <div class="header">
-            <a
-                class="header_btn"
-                href="{{ url_for('register') }}"
-            >Зарегистрироваться</a>
-        
-        <div class="profile">
-            Профиль
-        </div>
+            <form action="{{ url_for('logout') }}" method="post">
+                <button class="header_button">
+                    выйти
+                </button>
+            </form>
+            
+           
+            <form action="{{ url_for('login') }}" method="get">
+                <button class="header_button">
+                    войти
+                </button>
+            
+            </form>
+            <a class="header_button" href="{{ url_for('register')}}">зарегестрироваться</a>
+
+            <div class="profile">
+                Профиль
+            </div>
             
         
 
-        <div class="basket">
-            Корзина
+            <div class="basket">
+                Корзина
+            </div>
+            
         </div>
+        
+        
 
-
-
-        </div>
 
 
 
@@ -43,7 +54,14 @@
 
                     <div class="dish_card">
                     
-                    
+                    <h3>
+                        
+                         <img
+                        src="{{ url_for('uploaded_photo', image=[dish.image]) }}"
+                        
+                    >
+
+                    </h3>
 
 
 
