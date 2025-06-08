@@ -7,59 +7,54 @@
     <title>Menu</title>
 </head>
 <body>
-    <h1>Доступное меню:</h1>
+    <div class="main">
+    
+        <div class="header">
 
-    <div class="dish_table">
-            {% for dish_group in groups %}
-
-            <div class="dish_table_row">
-                {% for dish in dish_group %}
-
-
-            <a class="dish_card" href="{{ url_for('get_article', title=article.title) }}">
-                <h3>{{dish.name}}</h3>
-                <h5>{{dish.describtion}}</h5>
-                <h6>{{dish.image}}</h6>
-                <h6>{{dish.price}}</h6>
-            </a>
-            {% endfor %}
+            <div class="profile">
+                Профиль клиента
             </div>
-            {% endfor %}
+
+            <div class="basket">
+                Корзина
+            </div>
+
+
+
+        </div>
+
+
+
+
+    <div class="dish_list">
+        <h1>Доступное меню:</h1>
+
+            <div class="dish_table">
+                {% for dish_group in groups %}
+
+                <div class="dish_table_row">
+                    {% for dish in dish_group %}
+
+                    <div class="dish_card">
+            
+                    <h3>
+                        <img
+                        src="uploads/roll.jpg"
+                        
+                    ></h3>
+                    <h4>{{dish.name}}</h4>
+                      
+                    <h5>{{dish.price}} ₽</h5>
+                    </div>
+
+                {% endfor %}
+                </div>
+                {% endfor %}
+
+            </div>
 
     </div>
-
-
-
-
-
-
-
-
-      <div class="menu">
-
-        <div class="dish_body">
-
-            <div class="dish_name">
-                <h1>{{Dish.name}}</h1>
-            </div>    
-
-            <div class="dish_describtion">
-                <h1>{{Dish.describtion}}</h1>
-            </div>
-
-            <div class="dish_image">
-                <h1>{{Dish.image}}</h1>
-            </div>
-
-            
-
-            <div class="dish_price">
-                <h1>{{Dish.price}}</h1>
-            </div>
-            
-        
-        </div>
     
-    
+    </div>
 </body>
 </html>
