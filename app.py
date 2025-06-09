@@ -68,7 +68,7 @@ def index():
             database='seschool_01_pks1')
 
     dishes = DishTable.get_all_dishes()
-    count_in_group = 5
+    count_in_group = 4
 
     groups = []
     for i in range(0,len(dishes),count_in_group):
@@ -91,9 +91,16 @@ def admin_side():
 
 
 
-@app.route("/dish")
-def dish():
-    return render_template("dish.html")
+@app.route("/dish/<name>")
+def get_dish(name):
+    dish = DishTable.find_dish_by_name(name)
+    if dish is None:
+        return "<h1>Такого блюда нет в меню!</h1>"
+
+    return render_template(
+        "dish.html",
+        dish=dish
+        )
 
 
 

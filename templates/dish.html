@@ -10,7 +10,7 @@
 
 
         <div class="dish_image">
-            {{dish.image}}
+            <img src="{{ url_for('static', filename='uploads/' + dish.image) }}" class="dish_image">
         </div>
 
         <div class="dish_name">
@@ -22,9 +22,10 @@
         </div>
 
         <div class="dish_price">
-            {{dish.price}}
+            {{dish.price}} ₽
         </div>
 
+        <a href="{{ url_for('index') }}">Назад к меню</a>
 
 
 

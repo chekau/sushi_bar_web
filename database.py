@@ -124,4 +124,16 @@ class DishTable:
         return dishes
 
      
+    @staticmethod
+    def find_dish_by_name(name: str):
+        dishes = Database.fetchall(
+            "SELECT * FROM Dish WHERE name = %s", [name])
+        
+        if not name:
+            return None
+        
+        name, describtion, image, price = dishes[0]
+        return Dish(name, describtion, image, price)
+    
+
 
