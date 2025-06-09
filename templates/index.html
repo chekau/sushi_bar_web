@@ -53,19 +53,24 @@
                     {% for dish in dish_group %}
 
                     <div class="dish_card">
-                    
-                    <h3>
+                        <a href="{{ url_for('get_dish', name=dish.name) }}">
+                        <div class="dish_card_info">
+                        <h3>
                         
-                        <img src="{{ url_for('static', filename='uploads/' + dish.image) }} " class="dish_image">
+                            <img src="{{ url_for('static', filename='uploads/' + dish.image) }} " class="dish_image">
                         
 
 
-                    </h3>
+                        </h3>
+                        
 
-
-                    <h4>{{dish.name}}</h4>
-                      
-                    <h5>{{dish.price}} ₽</h5>
+                        <h4>{{dish.name}}</h4>
+                            
+                            {{dish.price}}
+        
+                        </div>
+                        
+                        </a>
                     </div>
 
                 {% endfor %}

@@ -12,7 +12,7 @@ import os
 from database import Database, DishTable
 from model import Dish
 from werkzeug.utils import secure_filename
-
+import hashlib
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "SHPI"
@@ -52,8 +52,6 @@ def add_menu():
     DishTable.add(name=name, describtion=describtion, image=image_filename, price=price)
    
     return redirect(url_for('add_menu', error=True))
-    
-
 
 
 
@@ -103,66 +101,73 @@ def get_dish(name):
         )
 
 
-
-@app.route("/register",methods=["GET","POST"])
+@app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "GET":
         return render_template("register.html")
-    
 
-    username = request.form.get("username")
     email = request.form.get("email")
     password = request.form.get("password")
     repeat_password = request.form.get("repeat_password")
 
-    if not username:
-        flash("имя пользователя не может быть пустым")
-        return redirect(request.url)
-
-    
     if not email:
-        flash("электронная почта не может быть пустым")
+        flash("Электронная почта не может быть пустой")
         return redirect(request.url)
 
-
-    
-    if not password:
-        flash("повторите пароль")
+    if not password or not repeat_password:
+        flash("Пароль и его подтверждение обязательны")
         return redirect(request.url)
-    
-    print(password)
-    print(repeat_password)
-    
+
     if password != repeat_password:
-        flash("пароли не совпадают")
+        flash("Пароли не совпадают")
+        return redirect(request.url)
+    
+    Database.open(
+            host='109.206.169.221', 
+            user='seschool_01', 
+            password='seschool_01', 
+            database='seschool_01_pks1')
+    
+    saved = Database.register_user(email,password)
+    if not saved:
+        flash("Пользователь с такой почтой уже существует")
         return redirect(request.url)
 
-    saved = Database.register_user(username,email,password)
-    if not saved:
-        flash("пользователь с таким никнеймом или почтой уже есть")
-        return redirect(request.url)
-    
-    
+    flash("Регистрация прошла успешно. Войдите в систему.")
     return redirect(url_for("login"))
 
-@app.route("/login",methods=["POST","GET"])
+@app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "GET":
         return render_template("login.html")
 
-
-    #POST ЗАПРОС
-
-    username = request.form.get("username")
+    email = request.form.get("email")
     password = request.form.get("password")
 
-    if not Database.can_be_logged_in(username,password):
-        flash("такого пользователя не существует или неверный пароль")
+    if not email or not password:
+        flash("Введите почту и пароль")
         return redirect(request.url)
-    
 
-    session['user_id'] = Database.find_user_id_by_name(username)
-    return redirect(url_for("index"))
+    Database.open(
+            host='109.206.169.221', 
+            user='seschool_01', 
+            password='seschool_01', 
+            database='seschool_01_pks1')
+
+    user = Database.fetchall("SELECT * FROM Users WHERE email = %s", [email])
+    if not user:
+        flash("Пользователь не найден")
+        return redirect(request.url)
+
+    password_hash = hashlib.md5(password.encode()).hexdigest()
+    if user[0]["password_hash"] != password_hash:
+        flash("Неверный пароль")
+        return redirect(request.url)
+
+    session["user_id"] = user[0]["id"]
+    session["user_email"] = user[0]["email"]
+    flash("Вы вошли в систему")
+    return redirect(url_for("login"))  # или на главную
 
 @app.route("/logout", methods=["POST"])
 def logout():

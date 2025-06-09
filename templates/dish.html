@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{  url_for('static',filename='style.css')  }}">
     <title>Блюдо</title>
 </head>
 <body>
     <div class="dish">
 
 
-        <div class="dish_image">
-            <img src="{{ url_for('static', filename='uploads/' + dish.image) }}" class="dish_image">
+        <div class="dish_image_detail">
+            <img src="{{ url_for('static', filename='uploads/' + dish.image) }} " class="dish_image_detail">
         </div>
 
         <div class="dish_name">
@@ -21,9 +22,18 @@
             {{dish.describtion}}
         </div>
 
+        
+         
         <div class="dish_price">
-            {{dish.price}} ₽
+            
+            <button class="header_button_price">
+                {{dish.price}} ₽
+
+            </button>
+        
+
         </div>
+        
 
         <a href="{{ url_for('index') }}">Назад к меню</a>
 

@@ -20,14 +20,14 @@
 
         <form action="" method="post" class="add_menu_form">
             <div class="form_group">
-                <label for="username">Логин</label>
-                <input type="text" id="username" name="username" required>
+                <label for="email">Логин</label>
+                <input type="text" id="email" name="email" required>
             </div>
 
             
 
             <div class="form_group">
-                <label for="username">Пароль</label>
+                <label for="password">Пароль</label>
                 <input type="password" id="password" name="password" required>
             </div>
 
@@ -39,7 +39,7 @@
 
 
         </form>
-
+        <p>Нет аккаунта? <a href="{{ url_for('register') }}">Зарегистрироваться</a></p>
     </div>
 </body>
 

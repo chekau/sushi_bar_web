@@ -16,11 +16,7 @@
         <div class="error_message">{{ message }}</div>
         {% endfor %}
 
-        <form action="" method="POST" class="add_menu_form">
-            <div class="form_group">
-                <label for="user_name">Имя пользователя</label>
-                <input type="text" id="user_name" name="user_name" required>
-            </div>
+        <form action="{{ url_for('register') }}" method="POST" class="">
 
             <div class="form_group">
                 <label for="email">Электронная почта</label>
@@ -39,6 +35,8 @@
 
             <button type="submit">Сохранить</button>
         </form>
+
+        <p>Уже есть аккаунт? <a href="{{ url_for('login') }}">Войти</a></p>
     </div>
 </body>
 

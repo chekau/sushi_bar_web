@@ -49,29 +49,20 @@ class Database:
     def close(cls):
         cls.__conection.close()
 
-    @staticmethod
-    def register_user(username,email,password):
-        #есть ли пользователи у которых уже указан такой никнейм или электронная почта
-        users = Database.fetchall("SELECT * FROM Users WHERE username = ? OR email = ?",
-            [username, email]
-         )
-        print(users)
+    def register_user(email, password):
+        users = Database.fetchall("SELECT * FROM Users WHERE email = %s", [email])
         if users:
             return False
-         
-        password_hash = hashlib.md5(password.encode()).hexdigest()
 
-        Database.execute("INSERT INTO Users (username, email, password_hash)"
-                          "VALUES (?,?,?)",
-                          [username,email,password_hash]
-        )
+        password_hash = hashlib.md5(password.encode()).hexdigest()
+        Database.execute("INSERT INTO Users (email, password_hash) VALUES (%s, %S)", [email, password_hash])
         return True
 
     @staticmethod
-    def can_be_logged_in(user_or_email: str, password: str):
+    def can_be_logged_in(email: str, password: str):
         # 1. Проверить, что пользователь с таким именем или электронной почтой есть
-        users = Database.fetchall("SELECT * FROM Users WHERE username = ? OR email = ?",
-            [user_or_email, user_or_email]
+        users = Database.fetchall("SELECT * FROM Users WHERE email = %s",
+            [email]
         )
         if not users:
             return False

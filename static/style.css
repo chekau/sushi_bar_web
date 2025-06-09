@@ -56,7 +56,8 @@ body {
 }
 
 .dish_image_detail {
-    max-width: 400px; 
+    width: 300px;
+    height: 300px;
     border-radius: 10px;
     overflow: hidden;
 }
@@ -104,7 +105,7 @@ body {
 
 .dish_table_row {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     margin-bottom: 10px;
 
 }
@@ -156,7 +157,13 @@ body {
 
 
 
-
+.header_button_price {
+    height: 50px;
+    width: 100px;
+    background-color: red;
+    border-radius: 10px;;
+    
+}
 
 
 .header_button {
