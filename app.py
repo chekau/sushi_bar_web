@@ -11,11 +11,12 @@ from flask import (
 import os
 from database import Database, DishTable
 from model import Dish
+from werkzeug.utils import secure_filename
 
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "SHPI"
-app.config["UPLOAD_FOLDER"] = "uploads/"
+app.config["UPLOAD_FOLDER"] =  os.path.join('static', 'uploads')
 
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
@@ -33,15 +34,14 @@ def add_menu():
     image = request.files.get("image")
     price = request.form.get("price")
     
+    image_filename = None
     
-    if image is not None: 
-        image_path = image
-        print(app.config["UPLOAD_FOLDER"] + image_path)
-        image.save(app.config["UPLOAD_FOLDER"] + image_path)
-        
+    if image is not None and image.filename:
+        filename = secure_filename(image.filename)
+        image_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+        image.save(image_path)
+        image_filename = filename
 
-    else:
-        image_path = None
     Database.open(
             host='109.206.169.221', 
             user='seschool_01', 
@@ -49,7 +49,7 @@ def add_menu():
             database='seschool_01_pks1')
 
     
-    DishTable.add(name, describtion, image, price)
+    DishTable.add(name=name, describtion=describtion, image=image_filename, price=price)
    
     return redirect(url_for('add_menu', error=True))
     
@@ -95,9 +95,6 @@ def admin_side():
 def dish():
     return render_template("dish.html")
 
-@app.route("/uploads/<image>")
-def uploaded_photo(image):
-    return send_from_directory(app.config['UPLOAD_FOLDER'], image)
 
 
 @app.route("/register",methods=["GET","POST"])

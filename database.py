@@ -52,9 +52,8 @@ class Database:
     @staticmethod
     def register_user(username,email,password):
         #есть ли пользователи у которых уже указан такой никнейм или электронная почта
-        users = Database.fetchall(
-             "SELECT * FROM Users WHERE username = ? OR email = ?",
-             [username, email]
+        users = Database.fetchall("SELECT * FROM Users WHERE username = ? OR email = ?",
+            [username, email]
          )
         print(users)
         if users:
@@ -71,8 +70,7 @@ class Database:
     @staticmethod
     def can_be_logged_in(user_or_email: str, password: str):
         # 1. Проверить, что пользователь с таким именем или электронной почтой есть
-        users = Database.fetchall(
-            "SELECT * FROM Users WHERE username = ? OR email = ?",
+        users = Database.fetchall("SELECT * FROM Users WHERE username = ? OR email = ?",
             [user_or_email, user_or_email]
         )
         if not users:
@@ -97,6 +95,7 @@ class DishTable:
     def add(cls,name, describtion, image, price):
         sql = "INSERT INTO Dish (`name`, `describtion`, `image`, `price`) VALUE (%s,%s,%s,%s)"
         values = (name, describtion, image, price)
+        print(name,describtion,image,price)
         Database.query(sql,values)
 
     @staticmethod

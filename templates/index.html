@@ -56,13 +56,11 @@
                     
                     <h3>
                         
-                         <img
-                        src="{{ url_for('uploaded_photo', image=[dish.image]) }}"
+                        <img src="{{ url_for('static', filename='uploads/' + dish.image) }} " class="dish_image">
                         
-                    >
+
 
                     </h3>
-
 
 
                     <h4>{{dish.name}}</h4>
