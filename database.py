@@ -50,12 +50,12 @@ class Database:
         cls.__conection.close()
 
     def register_user(email, password):
-        users = Database.fetchall("SELECT * FROM Users WHERE email = %s", [email])
+        users = Database.fetchall("SELECT * FROM Users WHERE email = %s", (email,))
         if users:
             return False
 
         password_hash = hashlib.md5(password.encode()).hexdigest()
-        Database.execute("INSERT INTO Users (email, password_hash) VALUES (%s, %S)", [email, password_hash])
+        Database.fetchall("INSERT INTO Users (email, password_hash) VALUES (%s, %s)", (email, password_hash))
         return True
 
     @staticmethod

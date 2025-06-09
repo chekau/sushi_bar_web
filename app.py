@@ -136,6 +136,7 @@ def register():
     flash("Регистрация прошла успешно. Войдите в систему.")
     return redirect(url_for("login"))
 
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "GET":
@@ -154,18 +155,18 @@ def login():
             password='seschool_01', 
             database='seschool_01_pks1')
 
-    user = Database.fetchall("SELECT * FROM Users WHERE email = %s", [email])
+    user = Database.fetchall("SELECT * FROM Users WHERE email = %s", (email,))
     if not user:
         flash("Пользователь не найден")
         return redirect(request.url)
 
     password_hash = hashlib.md5(password.encode()).hexdigest()
-    if user[0]["password_hash"] != password_hash:
+    if user[0][2] != password_hash:
         flash("Неверный пароль")
         return redirect(request.url)
 
-    session["user_id"] = user[0]["id"]
-    session["user_email"] = user[0]["email"]
+    session["user_id"] = user[0][0]
+    session["user_email"] = user[0][1]
     flash("Вы вошли в систему")
     return redirect(url_for("login"))  # или на главную
 
