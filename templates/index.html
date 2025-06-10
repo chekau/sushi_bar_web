@@ -10,10 +10,15 @@
     <div class="main">
     
         <div class="header">
+
+            {% if user_email %}
+            <p>Вы вошли как: {{ user_email }}</p>
+
             <form action="{{ url_for('logout') }}" method="post">
                 <button class="header_button">
                     выйти
                 </button>
+                {% else %}
             </form>
             
            
@@ -21,13 +26,13 @@
                 <button class="header_button">
                     войти
                 </button>
+                {% endif %}
             
             </form>
             <a class="header_button" href="{{ url_for('register')}}">зарегестрироваться</a>
 
-            <div class="profile">
-                Профиль
-            </div>
+            
+            
             
         
 
@@ -45,6 +50,8 @@
 
     <div class="dish_list">
         <h1>Доступное меню:</h1>
+
+
 
             <div class="dish_table">
                 {% for dish_group in groups %}
