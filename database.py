@@ -49,17 +49,19 @@ class Database:
     def close(cls):
         cls.__conection.close()
 
-    def register_user(email, password):
-        users = Database.fetchall("SELECT * FROM Users WHERE email = %s", (email,))
+    @classmethod
+    def register_user(cls,email, password):
+        users = cls.fetchall("SELECT * FROM Users WHERE email = %s", (email,))
         if users:
             return False
 
         password_hash = hashlib.md5(password.encode()).hexdigest()
-        Database.fetchall("INSERT INTO Users (email, password_hash) VALUES (%s, %s)", (email, password_hash))
+        cls.__cursor.execute("INSERT INTO Users (email, password_hash) VALUES (%s, %s)", (email, password_hash))
+        cls.__conection.commit()
         return True
 
-    @staticmethod
-    def can_be_logged_in(email: str, password: str):
+    @classmethod
+    def can_be_logged_in(cls,email: str, password: str):
         # 1. Проверить, что пользователь с таким именем или электронной почтой есть
         users = Database.fetchall("SELECT * FROM Users WHERE email = %s",
             [email]

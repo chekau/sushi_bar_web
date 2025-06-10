@@ -165,10 +165,10 @@ def login():
         flash("Неверный пароль")
         return redirect(request.url)
 
-    session["user_id"] = user[0][0]
-    session["user_email"] = user[0][1]
+    session["id"] = user[0][0]
+    session["email"] = email
     flash("Вы вошли в систему")
-    return redirect(url_for("login"))  # или на главную
+    return redirect(url_for("profile"))  # или на главную
 
 @app.route("/logout", methods=["POST"])
 def logout():
