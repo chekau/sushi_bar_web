@@ -1,5 +1,5 @@
 import mysql.connector
-from model import Dish
+from model import Dish,User,Order
 import hashlib
 
 connection = mysql.connector.connect(
@@ -128,5 +128,30 @@ class DishTable:
         name, describtion, image, price = dishes[0]
         return Dish(name, describtion, image, price)
     
+        
+    
 
 
+class OrderTable:
+    @staticmethod
+    def create_new_order(id,user_id, phone, address, delivery_time):
+        # Создаем новый заказ с статусом "cart"
+        new_order = Order(
+            id=id,  # Предполагается функция для генерации уникального ID заказа
+            user_id=user_id,
+            phone=phone,
+            address=address,
+            delivery_time=delivery_time,
+            status="cart"
+    )
+        return new_order
+
+    @staticmethod
+    def checkout_order(order):
+        # Обработка оплаты заказа
+        order.status = "cooking"  # Меняем статус на "cooking"
+    
+        # Создаем новый заказ с тем же пользователем и статусом "cart"
+        new_order = OrderTable.create_new_order(order.id,order.user_id, order.phone, order.address, order.delivery_time)
+    
+        return order, new_order

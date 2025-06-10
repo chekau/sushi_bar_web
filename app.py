@@ -14,6 +14,7 @@ from model import Dish
 from werkzeug.utils import secure_filename
 import hashlib
 
+
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "SHPI"
 app.config["UPLOAD_FOLDER"] =  os.path.join('static', 'uploads')
@@ -72,7 +73,9 @@ def index():
     for i in range(0,len(dishes),count_in_group):
         groups.append(dishes[i:i + count_in_group])
     
-    return render_template("index.html",groups=groups,user_count=DishTable.get_count_of_users())
+    user_email = session.get('email')  
+    
+    return render_template("index.html",groups=groups,user_count=DishTable.get_count_of_users(),user_email=user_email)
 
 
 @app.route("/choose")
@@ -99,6 +102,10 @@ def get_dish(name):
         "dish.html",
         dish=dish
         )
+
+
+
+
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -168,14 +175,15 @@ def login():
     session["id"] = user[0][0]
     session["email"] = email
     flash("Вы вошли в систему")
-    return redirect(url_for("profile"))  # или на главную
+    return redirect(url_for("index"))  # или на главную
 
 @app.route("/logout", methods=["POST"])
 def logout():
-    if "user_id" in session:
-        session.clear()
+    session.pop('id', None)
+    session.pop('email', None)
+    flash("Вы вышли из системы.")
     return redirect(url_for("index"))
-
+    
 
 
 
