@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+
+
+    <form 
+    action="{{  url_for('create_menu') }}"
+    method="post"
+    enctype="multipart/form-data"
+    class="add_menu_form"
+    >
+
+    <div class="form_group">
+        <label for="name">Название блюда</label>
+        <input type="text" id="name" required name="name">
+    </div>
+    
+    <div class="form_group">
+        <label for="phone">Номер телефона</label>
+        <input type="text" id="phone" required name="phone">
+    </div>
+    
+    <div class="form_group">
+            <label for="adress">Адресс доставки</label>
+            <input type="text" id="adress" name="adress"> 
+        </div>
+
+    <div class="form_group">
+        <label for="delivery_time">Время доставки</label>
+        <input type="time" id="delivery_time" required name="delivery_time">
+    </div>
+    
+    <div class="form_group">
+        <label for="payment_method">Способ оплаты</label>
+        <input type="text" id="payment_method" required name="payment_method">
+    </div>
+
+    <button type="submit">Добавить блюдо</button>
+
+</body>
+</html>
