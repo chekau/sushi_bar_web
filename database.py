@@ -1,5 +1,5 @@
 import mysql.connector
-from model import Dish,User,Order
+from model import Dish,User,Orders
 import hashlib
 
 connection = mysql.connector.connect(
@@ -104,10 +104,11 @@ class DishTable:
         dishes = []
         
 
-        for (name,describtion,image,price) in Database.fetchall(
+        for (id,name,describtion,image,price) in Database.fetchall(
 
         "SELECT * FROM Dish"):
             dishes.append(Dish(
+            id=id,
             name=name,
             describtion=describtion,
             image=image,
@@ -124,27 +125,24 @@ class DishTable:
         
         if not name:
             return None
+
+        if not dishes:
+            return None
         
-        name, describtion, image, price = dishes[0]
-        return Dish(name, describtion, image, price)
+        id, name, describtion, image, price = dishes[0]
+        return Dish(id, name, describtion, image, price)
     
         
     
 
 
-class OrderTable:
+class OrdersTable:
     @staticmethod
-    def create_new_order(id,user_id, phone, address, delivery_time):
-        # Создаем новый заказ с статусом "cart"
-        new_order = Order(
-            id=id,  # Предполагается функция для генерации уникального ID заказа
-            user_id=user_id,
-            phone=phone,
-            address=address,
-            delivery_time=delivery_time,
-            status="cart"
-    )
-        return new_order
+    def create_new_order(user_id, customer_name,phone, address, delivery_time, payment_method, status):
+        sql = "INSERT INTO Orders (`user_id`, `customer_name`, `phone`, `address`,`delivery_time`, `payment_method`, `status`) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+        values = (user_id,customer_name, phone, address,delivery_time, payment_method, status)
+        Database.query(sql,values)
+
 
     @staticmethod
     def checkout_order(order):
@@ -152,6 +150,6 @@ class OrderTable:
         order.status = "cooking"  # Меняем статус на "cooking"
     
         # Создаем новый заказ с тем же пользователем и статусом "cart"
-        new_order = OrderTable.create_new_order(order.id,order.user_id, order.phone, order.address, order.delivery_time)
+        new_order = OrdersTable.create_new_order(order.id,order.user_id, order.phone, order.address, order.delivery_time)
     
         return order, new_order

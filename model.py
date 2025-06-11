@@ -2,18 +2,20 @@ from dataclasses import dataclass
 
 @dataclass
 class User:
+    id: int
     name: str
     email: str
 
 @dataclass
 class Dish:
+    id: int
     name: str
     describtion: str
     image: str
     price: float
 
 @dataclass
-class Order:
+class Orders:
     id: int
     user_id: int
     phone: str

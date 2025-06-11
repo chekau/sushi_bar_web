@@ -9,8 +9,8 @@ from flask import (
     flash,
     session)
 import os
-from database import Database, DishTable
-from model import Dish
+from database import Database, DishTable, OrdersTable
+from model import Dish, Orders
 from werkzeug.utils import secure_filename
 import hashlib
 
@@ -104,7 +104,38 @@ def get_dish(name):
         )
 
 
+@app.route('/create_order', methods=['GET', 'POST'])
+def create_order():
+    if request.method == "GET":
+        return render_template('create_order.html',error=request.args.get("error"))
+    
+    user_id = session.get('id')
+    print(session)
+    if user_id is None:
+        flash('You must be logged in to create an order.', 'error')
+        return redirect(url_for('login'))  # Перенаправление на страницу входа
 
+    customer_name = request.form.get("customer_name")
+    phone = request.form.get("phone")
+    address = request.form.get("address")
+    delivery_time = request.form.get("delivery_time")
+    payment_method = request.form.get("payment_method")
+    status = request.form.get("status")    
+
+
+    Database.open(
+            host='109.206.169.221', 
+            user='seschool_01', 
+            password='seschool_01', 
+            database='seschool_01_pks1')
+
+    
+    OrdersTable.create_new_order(user_id=user_id, customer_name=customer_name, phone=phone, address=address, 
+                                 delivery_time=delivery_time, 
+                                 payment_method=payment_method,
+                                 status=status)
+   
+    return redirect(url_for('create_order', error=True))
 
 
 

@@ -10,15 +10,15 @@
 
 
     <form 
-    action="{{  url_for('create_menu') }}"
+    action="{{  url_for('create_order') }}"
     method="post"
     enctype="multipart/form-data"
     class="add_menu_form"
     >
 
     <div class="form_group">
-        <label for="name">Название блюда</label>
-        <input type="text" id="name" required name="name">
+        <label for="customer_name">Имя получателя</label>
+        <input type="text" id="customer_name" required name="customer_name">
     </div>
     
     <div class="form_group">
@@ -27,8 +27,8 @@
     </div>
     
     <div class="form_group">
-            <label for="adress">Адресс доставки</label>
-            <input type="text" id="adress" name="adress"> 
+            <label for="address">Адресс доставки</label>
+            <input type="text" id="address" name="address"> 
         </div>
 
     <div class="form_group">
@@ -41,7 +41,12 @@
         <input type="text" id="payment_method" required name="payment_method">
     </div>
 
-    <button type="submit">Добавить блюдо</button>
+    <div class="form_group">
+        <label for="status">Статус</label>
+        <input type="text" id="status" required name="status">
+    </div>
+
+    <button type="submit">Заказать</button>
 
 </body>
 </html>
