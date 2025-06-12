@@ -104,15 +104,22 @@ def get_dish(name):
         )
 
 
+
+
+
+
+
+
+
 @app.route('/create_order', methods=['GET', 'POST'])
 def create_order():
     if request.method == "GET":
         return render_template('create_order.html',error=request.args.get("error"))
     
-    user_id = session.get('id')
+    user_id = session.get("id")
     print(session)
     if user_id is None:
-        flash('You must be logged in to create an order.', 'error')
+        flash('Вы должны сначала войти в свой аккаунт, перед тем как заказать еду ')
         return redirect(url_for('login'))  # Перенаправление на страницу входа
 
     customer_name = request.form.get("customer_name")
@@ -120,7 +127,7 @@ def create_order():
     address = request.form.get("address")
     delivery_time = request.form.get("delivery_time")
     payment_method = request.form.get("payment_method")
-    status = request.form.get("status")    
+    status = request.form.get("status")  
 
 
     Database.open(
