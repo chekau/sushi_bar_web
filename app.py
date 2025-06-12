@@ -9,7 +9,7 @@ from flask import (
     flash,
     session)
 import os
-from database import Database, DishTable, OrdersTable
+from database import Database, DishTable, OrdersTable, DishToOrders
 from model import Dish, Orders
 from werkzeug.utils import secure_filename
 import hashlib
@@ -104,7 +104,45 @@ def get_dish(name):
         )
 
 
+@app.route("/add_dish_to_order/<name>", methods=["GET","POST"])
+def add_dish_to_order(name):
+    if request.method == "GET":
+        return render_template('add_dish_to_order.html',error=request.args.get("error"))
+    
+    user_id = session.get("id")
+    print(session)
+    if user_id is None:
+        flash('Вы должны сначала войти в свой аккаунт, перед тем как заказать еду ')
+        return redirect(url_for('login'))  # Перенаправление на страницу входа
+    
 
+
+    dish_id = DishTable.find_id_by_name(name)
+    order_id = OrdersTable.find_order_id_by_user_id(user_id)
+
+    print(dish_id, order_id)
+
+    # Проверка типов и извлечение одиночных значений
+    if isinstance(dish_id, list) and len(dish_id) > 0:
+        dish_id = dish_id[0][0]
+    if isinstance(order_id, list) and len(order_id) > 0:
+        order_id = order_id[0][0]
+
+    if dish_id is None or order_id is None:
+        flash('Ошибка: Блюдо или заказ не найдены.')
+        return redirect(url_for('index'))
+    
+    print(dish_id, order_id)
+    Database.open(
+            host='109.206.169.221', 
+            user='seschool_01', 
+            password='seschool_01', 
+            database='seschool_01_pks1')
+
+
+    DishToOrders.add_dish_to_order(dish_id=dish_id,order_id=order_id)
+
+    return redirect(url_for('add_dish_to_order', name=name, error=True))
 
 
 
@@ -141,8 +179,12 @@ def create_order():
                                  delivery_time=delivery_time, 
                                  payment_method=payment_method,
                                  status=status)
-   
+    
+
     return redirect(url_for('create_order', error=True))
+
+
+
 
 
 
