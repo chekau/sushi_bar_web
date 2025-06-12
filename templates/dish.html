@@ -9,39 +9,54 @@
 <body>
     <div class="dish">
 
+        <div class="dish_image_info">
 
         <div class="dish_image_detail">
             <img src="{{ url_for('static', filename='uploads/' + dish.image) }} " class="dish_image_detail">
         </div>
 
-        <div class="dish_name">
-            {{dish.name}}
         </div>
 
-        <div class="dish_describtion">
-            {{dish.describtion}}
-        </div>
+
+        <div class="dish_text_info">
+            <div class="dish_name">
+                {{dish.name}}
+            </div>
+
+            <div class="dish_describtion">
+                {{dish.describtion}}
+            </div>
 
         
          
-        <div class="dish_price">
+            <div class="dish_price">
             
-            <button class="header_button_price">
-                {{dish.price}} ₽
+                <button class="header_button_price">
+                    {{dish.price}} ₽
 
-            </button>
-        </div>
-
-        <div class="dish_tocart">
-
-
-        </div>
+                </button>
+            </div>
         
+            <div class="dish_dop_info">
 
-        <a href="{{ url_for('index') }}">Назад к меню</a>
+                <div class="back">
 
-    
+                    <a href="{{ url_for('index') }}">Назад к меню</a>
 
+                </div>
+             
+           
+
+                <div class="add_cart">
+                <form action="{{ url_for('add_dish_to_order', name=dish.name) }}" method="POST">
+                    <button type="submit">Добавить блюдо в корзину
+                    </button>
+                </form>
+                </div>
+
+            </div>
+
+        </div>
 
 
 
