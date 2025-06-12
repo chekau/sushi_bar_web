@@ -154,4 +154,11 @@ class OrdersTable:
     
         return order, new_order
     
+
+class DishToOrders:
+    @staticmethod
+    def add_dish_to_order(dish_id, order_id):
+        sql = "INSERT INTO DishToOrders (dish_id, order_id) VALUES (%s, %s)"
+        values = (dish_id, order_id)
+        Database.query(sql, values)
     
