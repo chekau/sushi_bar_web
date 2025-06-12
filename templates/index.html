@@ -31,19 +31,17 @@
             </form>
             <a class="header_button" href="{{ url_for('register')}}">зарегестрироваться</a>
 
-            
-
+            </form>
             
         
 
             <div class="basket">
                 Корзина
-            </div>
             
-        </div>
+            </div>
         
         
-
+            </div>
 
 
 
@@ -60,7 +58,7 @@
                     {% for dish in dish_group %}
 
                     <div class="dish_card">
-                        <a href="{{ url_for('get_dish', name=dish.name) }}">
+                        <a href="{{ url_for('get_dish', name=dish.name) }}" class="link_dish">
                         <div class="dish_card_info">
                         <h3>
                         
@@ -71,13 +69,21 @@
                         </h3>
                         
 
-                        <h4>{{dish.name}}</h4>
-                            
-                            {{dish.price}} ₽
+                        
+                           <b> <h4>{{dish.name}}</h4> </b>
+                        
+                        
+                        
+                        <button class="header_button_price">
+                                {{dish.price}} ₽
+
+                        </button>   
+
+                        </a>
         
                         </div>
                         
-                        </a>
+                        
                     </div>
 
                 {% endfor %}
@@ -88,6 +94,8 @@
 
     </div>
     
+    
+
     </div>
 </body>
 </html>
