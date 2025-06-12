@@ -18,8 +18,9 @@ class Dish:
 class Orders:
     id: int
     user_id: int
+    customer_name: str
     phone: str
     address: str
     delivery_time: str
-    pay: str = "cash"
+    payment_method: str = "cash"
     status: str = "cart"  # Статус по умолчанию - "cart"
