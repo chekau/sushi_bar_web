@@ -3,11 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{  url_for('static',filename='style.css')  }}">
     <title>Document</title>
 </head>
 <body>
     
-
+    <div class="create_order">
+    <h1>Оформление заказа</h1>
 
     <form 
     action="{{  url_for('create_order') }}"
@@ -49,5 +51,6 @@
 
     <button type="submit">Заказать</button>
 
+    </div>
 </body>
 </html>

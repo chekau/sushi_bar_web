@@ -23,33 +23,34 @@
                 {{dish.name}}
             </div>
 
+            <div class="back">
+
+                    <a href="{{ url_for('index') }}">
+
+                    <img src="{{ url_for('static', filename='uploads/back_img.jpg') }}" 
+                    alt="Назад к меню" style="width: 24px; height: 24px;">
+
+                    </a>
+
+            </div>
+
             <div class="dish_describtion">
                 {{dish.describtion}}
             </div>
 
         
          
-            <div class="dish_price">
             
-                <button class="header_button_price">
-                    {{dish.price}} ₽
-
-                </button>
-            </div>
         
             <div class="dish_dop_info">
 
-                <div class="back">
-
-                    <a href="{{ url_for('index') }}">Назад к меню</a>
-
-                </div>
              
            
 
                 <div class="add_cart">
                 <form action="{{ url_for('add_dish_to_order', name=dish.name) }}" method="POST">
-                    <button type="submit">Добавить блюдо в корзину
+                    <button type="submit" class="btn_cart">Добавить блюдо в корзину
+                        {{dish.price}} ₽
                     </button>
                 </form>
                 </div>

@@ -156,6 +156,13 @@ def show_cart():
         flash('Вы должны сначала войти в свой аккаунт, перед тем как заказать еду ')
         return redirect(url_for('login'))  # Перенаправление на страницу входа
     
+
+    Database.open(
+            host='109.206.169.221', 
+            user='seschool_01', 
+            password='seschool_01', 
+            database='seschool_01_pks1')
+
     order_id = DishToOrders.get_order_id(user_id)
     print(user_id, order_id)
 
