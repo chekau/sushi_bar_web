@@ -9,15 +9,17 @@ from flask import (
     flash,
     session)
 import os
-from database import Database, DishTable, OrdersTable, DishToOrders
-from model import Dish, Orders
+from src.database import Database, DishTable, OrdersTable, DishToOrders
+from src.model import Dish, Orders
 from werkzeug.utils import secure_filename
 import hashlib
 
 
-app = Flask(__name__)
+app = Flask(__name__,
+            static_folder="src/static",
+            template_folder="src/templates")
 app.config["SECRET_KEY"] = "SHPI"
-app.config["UPLOAD_FOLDER"] =  os.path.join('static', 'uploads')
+app.config["UPLOAD_FOLDER"] =  os.path.join("src", "static", "uploads")
 
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 

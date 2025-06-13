@@ -1,5 +1,5 @@
 import mysql.connector
-from model import Dish,User,Orders
+from src.model import Dish,User,Orders
 import hashlib
 
 connection = mysql.connector.connect(
