@@ -32,13 +32,19 @@
             <a class="header_button" href="{{ url_for('register')}}">зарегестрироваться</a>
 
             </form>
+
+            <form action="{{ url_for('create_order')}}" method="get">
+                <button class="header_button">
+                    Оформите заказ
+                </button>
+                
+            </form>
             
         
 
             <div class="basket">
                 <form action="{{ url_for('show_cart') }}" method="POST">
-                    <button type="submit">Корзина
-                    </button>
+                    <input type="image" src="{{ url_for('static', filename='uploads/cart_button.jpg') }}"  style="width: 50px; height: 50px;">
                 </form>
             
             </div>
