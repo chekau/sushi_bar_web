@@ -132,6 +132,19 @@ class DishTable:
         id, name, describtion, image, price = dishes[0]
         return Dish(id, name, describtion, image, price)
     
+    @staticmethod
+    def find_id_by_name(name: str):
+        dish_id = Database.fetchall(
+            "SELECT `id` FROM Dish WHERE name=%s", [name])
+        
+        if not name:
+            return None
+        
+        if not dish_id:
+            return None
+        
+        return dish_id
+    
         
     
 
@@ -154,6 +167,19 @@ class OrdersTable:
     
         return order, new_order
     
+    @staticmethod
+    def find_order_id_by_user_id(user_id):
+        order_id = Database.fetchall(
+            "SELECT `id` FROM Orders WHERE user_id =%s", [user_id]
+        )
+
+        if not order_id:
+            return None
+        if not user_id:
+            return None
+        
+        return order_id
+    
 
 class DishToOrders:
     @staticmethod
@@ -161,4 +187,24 @@ class DishToOrders:
         sql = "INSERT INTO DishToOrders (dish_id, order_id) VALUES (%s, %s)"
         values = (dish_id, order_id)
         Database.query(sql, values)
-    
+
+    @staticmethod
+    def show_cart(order_id):
+        
+        dishes = Database.fetchall("SELECT NAME,price FROM Dish "
+        "INNER JOIN DishToOrders ON DishToOrders.dish_id = Dish.id "
+        "INNER JOIN Orders ON Orders.id = DishToOrders.order_id "
+        "WHERE Orders.id = %s", [order_id]
+        )
+        print(f" вот ордер_айди - {order_id}")
+        
+        return dishes
+
+    @staticmethod
+    def get_order_id(user_id):
+        order_id = Database.fetchall(
+           "SELECT id FROM Orders WHERE user_id = %s", 
+           [user_id]
+       )
+        return order_id
+

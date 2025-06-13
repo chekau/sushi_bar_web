@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Корзина</title>
+</head>
+<body>
+    <h1>Ваш заказ:</h1>
+    <div class="basket">
+        {% if dishes %}
+            <ul>
+                {% for dish in dishes %}
+                    <li>{{ dish[0] }} - {{ dish[1] }} руб.</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Ваша корзина пуста.</p>
+        {% endif %}
+    </div>
+</body>
+</html>

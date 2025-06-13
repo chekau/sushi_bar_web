@@ -36,7 +36,10 @@
         
 
             <div class="basket">
-                Корзина
+                <form action="{{ url_for('show_cart') }}" method="POST">
+                    <button type="submit">Корзина
+                    </button>
+                </form>
             
             </div>
         

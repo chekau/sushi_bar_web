@@ -145,6 +145,45 @@ def add_dish_to_order(name):
     return redirect(url_for('add_dish_to_order', name=name, error=True))
 
 
+@app.route("/show_cart", methods=['GET','POST'])
+def show_cart():
+    if request.method == "GET":
+        return render_template('show_cart.html',error=request.args.get("error"))
+    
+    user_id = session.get("id")
+    print(session)
+    if user_id is None:
+        flash('Вы должны сначала войти в свой аккаунт, перед тем как заказать еду ')
+        return redirect(url_for('login'))  # Перенаправление на страницу входа
+    
+    order_id = DishToOrders.get_order_id(user_id)
+    print(user_id, order_id)
+
+
+    if order_id is None:
+        flash('Ошибка: Блюдо или заказ не найдены.')
+        return redirect(url_for('index'))
+    
+    order_id = order_id[0][0]
+    
+    print(order_id)
+    
+    Database.open(
+            host='109.206.169.221', 
+            user='seschool_01', 
+            password='seschool_01', 
+            database='seschool_01_pks1')
+
+    dishes = DishToOrders.show_cart(order_id)
+    print("User ID:", user_id)
+    print("Order ID:", order_id)
+    print("Dishes:", dishes)
+
+    return render_template("show_cart.html", dishes=dishes)
+
+    
+    
+
 
 
 

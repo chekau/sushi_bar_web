@@ -24,3 +24,10 @@ class Orders:
     delivery_time: str
     payment_method: str = "cash"
     status: str = "cart"  # Статус по умолчанию - "cart"
+
+
+
+@dataclass
+class DishToOrders:
+    dish_id: int
+    order_id: int
