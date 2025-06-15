@@ -33,7 +33,8 @@ class Cart:
     quantity: int
 
 
-# @dataclass
-# class DishToOrders:
-#     dish_id: int
-#     order_id: int
+@dataclass
+class DishToOrders:
+    dish_id: int
+    order_id: int
+    quantity: int

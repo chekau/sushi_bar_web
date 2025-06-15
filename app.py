@@ -9,7 +9,8 @@ from flask import (
     flash,
     session)
 import os
-from src.database import Database, DishTable, OrdersTable, CartTable
+from src.database import Database, DishTable, OrdersTable, CartTable, DishToOrders
+from src.config import CONFIG
 from src.model import Dish, Orders
 from werkzeug.utils import secure_filename
 import hashlib
@@ -23,6 +24,9 @@ app.config["UPLOAD_FOLDER"] =  os.path.join("src", "static", "uploads")
 
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
+@app.before_request
+def initialize_database():
+    Database.open()
 
 
 
@@ -45,12 +49,7 @@ def add_menu():
         image.save(image_path)
         image_filename = filename
 
-    Database.open(
-            host='109.206.169.221', 
-            user='seschool_01', 
-            password='seschool_01', 
-            database='seschool_01_pks1')
-
+    
     
     DishTable.add(name=name, describtion=describtion, image=image_filename, price=price)
    
@@ -62,11 +61,6 @@ def add_menu():
 @app.route("/")
 @app.route("/index")
 def index():
-    Database.open(
-            host='109.206.169.221', 
-            user='seschool_01', 
-            password='seschool_01', 
-            database='seschool_01_pks1')
 
     dishes = DishTable.get_all_dishes()
     count_in_group = 4
@@ -114,16 +108,11 @@ def add_to_cart(dish_id):
         flash('Вы должны сначала войти в свой аккаунт, чтобы добавлять блюда в корзину.')
         return redirect(url_for('login'))
 
-    Database.open(
-            host='109.206.169.221', 
-            user='seschool_01', 
-            password='seschool_01', 
-            database='seschool_01_pks1')
 
-    # Здесь вы можете добавить логику для добавления блюда в корзину
+
     CartTable.add_to_cart(user_id=user_id, dish_id=dish_id)
 
-    flash('Блюдо успешно добавлено в корзину!')
+
     return redirect(url_for('show_cart'))
 
 
@@ -144,11 +133,6 @@ def show_cart():
         return redirect(url_for('login'))  # Перенаправление на страницу входа
     
 
-    Database.open(
-            host='109.206.169.221', 
-            user='seschool_01', 
-            password='seschool_01', 
-            database='seschool_01_pks1')
 
     dishes = CartTable.get_dishes_from_user(user_id)
     return render_template("show_cart.html", dishes=dishes)
@@ -171,11 +155,7 @@ def create_order():
         flash('Вы должны сначала войти в свой аккаунт, перед тем как заказать еду ')
         return redirect(url_for('login'))  # Перенаправление на страницу входа
 
-    Database.open(
-            host='109.206.169.221', 
-            user='seschool_01', 
-            password='seschool_01', 
-            database='seschool_01_pks1')
+
 
 
     cart_dishes = CartTable.get_dishes_from_user(user_id)
@@ -191,23 +171,24 @@ def create_order():
     payment_method = request.form.get("payment_method")
     status = request.form.get("status")  
 
-
-    Database.open(
-            host='109.206.169.221', 
-            user='seschool_01', 
-            password='seschool_01', 
-            database='seschool_01_pks1')
+    
 
     
-    order_id = OrdersTable.create_new_order(user_id=user_id, customer_name=customer_name, phone=phone, address=address, 
-                                 delivery_time=delivery_time, 
+    OrdersTable.create_new_order(user_id=user_id, customer_name=customer_name, phone=phone, address=address, 
+                                  delivery_time=delivery_time, 
                                  payment_method=payment_method,
                                  status=status)
     
-    for dish in cart_dishes:
-        CartTable.add_dish_to_order(order_id, dish["dish_id"])
+    order_id = OrdersTable.find_order_id_by_user_id(user_id)
+    print(order_id)
+    print(user_id)
+    print(cart_dishes)
 
-    # Очистите корзину после оформления заказа
+
+    for dish in cart_dishes:
+        DishToOrders.add_dish_to_order(order_id, dish["id"], dish["quantity"])
+
+
     CartTable.clear_cart(user_id)
 
     
@@ -240,11 +221,6 @@ def register():
         flash("Пароли не совпадают")
         return redirect(request.url)
     
-    Database.open(
-            host='109.206.169.221', 
-            user='seschool_01', 
-            password='seschool_01', 
-            database='seschool_01_pks1')
     
     saved = Database.register_user(email,password)
     if not saved:
@@ -267,11 +243,7 @@ def login():
         flash("Введите почту и пароль")
         return redirect(request.url)
 
-    Database.open(
-            host='109.206.169.221', 
-            user='seschool_01', 
-            password='seschool_01', 
-            database='seschool_01_pks1')
+
 
     user = Database.fetchall("SELECT * FROM Users WHERE email = %s", (email,))
     if not user:
@@ -299,3 +271,4 @@ def logout():
 
 
 app.run(debug=True, port=8080)
+

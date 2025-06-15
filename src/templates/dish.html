@@ -48,7 +48,7 @@
            
 
                 <div class="add_cart">
-                <form action="{{ url_for('add_dish_to_order', name=dish.name) }}" method="POST">
+                <form action="{{ url_for('add_to_cart', dish_id=dish.id) }}" method="POST">
                     <button type="submit" class="btn_cart">Добавить блюдо в корзину
                         {{dish.price}} ₽
                     </button>

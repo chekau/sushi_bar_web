@@ -17,7 +17,7 @@ body {
 
 .header {
     height: 80px;
-    background-color:bisque;
+    background-color:white;
     border-radius: 10px;
     padding-left: 20px;
     padding-right: 20px;
@@ -89,7 +89,7 @@ body {
 
 
 .dish_list {
-    background-color: whitesmoke;
+    background-color: white;
     border-radius: 10px;
     padding-left: 20px;
     padding-right: 20px;
@@ -120,7 +120,7 @@ body {
     margin-right: 10px;
     border-radius: 10px;
     text-decoration: none;
-    background-color: bisque;
+    background-color: white;
     box-shadow: 3px;
 }
 

@@ -1,23 +1,18 @@
 import mysql.connector
 from src.model import Dish,User,Orders,Cart
+from src.config import CONFIG
 import hashlib
 
-connection = mysql.connector.connect(
-    
-    host='109.206.169.221',
-    user='seschool_01',
-    password='seschool_01',
-    database='seschool_01_pks1'
-)
+
 
 class Database: 
     __conection = None
     @classmethod
     def open(cls, 
-             host='109.206.169.221', 
-             user='seschool_01', 
-             password='seschool_01', 
-             database='seschool_01_pks1'):
+             host=CONFIG['host'], 
+             user=CONFIG['user'],
+             password=CONFIG['password'],
+             database=CONFIG['database']):
         if cls.__conection is None:
             cls.__conection = mysql.connector.connect(
                 user=user,
@@ -214,11 +209,11 @@ class CartTable:
 
     # Получаем все блюда из корзины для данного пользователя
         dishes = Database.fetchall(
-        "SELECT Dish.name,Dish.price,Cart.quantity FROM Cart JOIN Dish ON Cart.dish_id = Dish.id  WHERE Cart.user_id = %s",
+        "SELECT Dish.id,Dish.name,Dish.price,Cart.quantity FROM Cart JOIN Dish ON Cart.dish_id = Dish.id  WHERE Cart.user_id = %s",
         (user_id,)
     )
 
-        return dishes  # Возвращаем список блюд и их количества
+        return [{"id": dish[0], "name": dish[1], "price": dish[2], "quantity": dish[3]} for dish in dishes]
 
     @staticmethod
     def clear_cart(user_id):
@@ -230,3 +225,15 @@ class CartTable:
     )
 
 
+class DishToOrders:
+    @staticmethod
+    def add_dish_to_order(order_id, dish_id, quantity):
+
+
+        # Добавляем блюдо в заказ
+        sql = "INSERT INTO DishToOrders (`order_id`, `dish_id`, `quantity`) VALUE (%s,%s,%s)"
+        values = (order_id, dish_id, quantity)
+        Database.fetchall(sql,values)
+
+
+   
