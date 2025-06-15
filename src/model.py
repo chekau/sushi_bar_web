@@ -26,8 +26,14 @@ class Orders:
     status: str = "cart"  # Статус по умолчанию - "cart"
 
 
-
 @dataclass
-class DishToOrders:
+class Cart:
+    user_id: int
     dish_id: int
-    order_id: int
+    quantity: int
+
+
+# @dataclass
+# class DishToOrders:
+#     dish_id: int
+#     order_id: int
