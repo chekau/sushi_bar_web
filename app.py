@@ -228,8 +228,8 @@ def create_order():
                                  payment_method=payment_method,
                                  status=status)
     
-
-    return redirect(url_for('create_order', error=True))
+    flash("Заказ успешно оформлен!")
+    return redirect(url_for('index', error=True))
 
 
 
