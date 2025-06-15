@@ -1,5 +1,5 @@
 import mysql.connector
-from src.model import Dish,User,Orders
+from src.model import Dish,User,Orders,Cart
 import hashlib
 
 connection = mysql.connector.connect(
@@ -181,30 +181,52 @@ class OrdersTable:
         return order_id
     
 
-class DishToOrders:
-    @staticmethod
-    def add_dish_to_order(dish_id, order_id):
-        sql = "INSERT INTO DishToOrders (dish_id, order_id) VALUES (%s, %s)"
-        values = (dish_id, order_id)
-        Database.query(sql, values)
 
+class CartTable:
     @staticmethod
-    def show_cart(order_id):
-        
-        dishes = Database.fetchall("SELECT NAME,price FROM Dish "
-        "INNER JOIN DishToOrders ON DishToOrders.dish_id = Dish.id "
-        "INNER JOIN Orders ON Orders.id = DishToOrders.order_id "
-        "WHERE Orders.id = %s", [order_id]
+    def add_to_cart(user_id,dish_id, quantity=1):
+
+    # Проверяем, есть ли уже это блюдо в корзине
+        existing_item = Database.fetchall(
+        "SELECT quantity FROM Cart WHERE user_id = %s AND dish_id = %s",
+        (user_id, dish_id)
+    )
+
+        if existing_item:
+        # Если блюдо уже есть в корзине, увеличиваем количество
+            new_quantity = existing_item[0][0] + quantity
+            Database.fetchall(
+            "UPDATE Cart SET quantity = %s WHERE user_id = %s AND dish_id = %s",
+            (new_quantity, user_id, dish_id)
         )
-        print(f" вот ордер_айди - {order_id}")
-        
-        return dishes
+        else:
+        # Если блюда нет в корзине, добавляем его
+            Database.fetchall(
+            "INSERT INTO Cart (user_id, dish_id, quantity) VALUES (%s, %s, %s)",
+            (user_id, dish_id, quantity)
+        )
+
+
 
     @staticmethod
-    def get_order_id(user_id):
-        order_id = Database.fetchall(
-           "SELECT id FROM Orders WHERE user_id = %s", 
-           [user_id]
-       )
-        return order_id
+    def get_dishes_from_user(user_id):
+    
+
+    # Получаем все блюда из корзины для данного пользователя
+        dishes = Database.fetchall(
+        "SELECT Dish.name,Dish.price,Cart.quantity FROM Cart JOIN Dish ON Cart.dish_id = Dish.id  WHERE Cart.user_id = %s",
+        (user_id,)
+    )
+
+        return dishes  # Возвращаем список блюд и их количества
+
+    @staticmethod
+    def clear_cart(user_id):
+
+    # Удаляем все блюда из корзины для данного пользователя
+        Database.fetchall(
+        "DELETE FROM Cart WHERE user_id = %s",
+        (user_id,)
+    )
+
 
