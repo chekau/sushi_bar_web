@@ -9,7 +9,7 @@ from flask import (
     flash,
     session)
 import os
-from src.database import Database, DishTable, OrdersTable, DishToOrders
+from src.database import Database, DishTable, OrdersTable, CartTable
 from src.model import Dish, Orders
 from werkzeug.utils import secure_filename
 import hashlib
@@ -106,45 +106,30 @@ def get_dish(name):
         )
 
 
-@app.route("/add_dish_to_order/<name>", methods=["GET","POST"])
-def add_dish_to_order(name):
-    if request.method == "GET":
-        return render_template('add_dish_to_order.html',error=request.args.get("error"))
-    
+
+@app.route("/add_to_cart/<dish_id>", methods=["GET","POST"])
+def add_to_cart(dish_id):
     user_id = session.get("id")
-    print(session)
     if user_id is None:
-        flash('Вы должны сначала войти в свой аккаунт, перед тем как заказать еду ')
-        return redirect(url_for('login'))  # Перенаправление на страницу входа
-    
+        flash('Вы должны сначала войти в свой аккаунт, чтобы добавлять блюда в корзину.')
+        return redirect(url_for('login'))
 
-
-    dish_id = DishTable.find_id_by_name(name)
-    order_id = OrdersTable.find_order_id_by_user_id(user_id)
-
-    print(dish_id, order_id)
-
-    # Проверка типов и извлечение одиночных значений
-    if isinstance(dish_id, list) and len(dish_id) > 0:
-        dish_id = dish_id[0][0]
-    if isinstance(order_id, list) and len(order_id) > 0:
-        order_id = order_id[0][0]
-
-    if dish_id is None or order_id is None:
-        flash('Ошибка: Блюдо или заказ не найдены.')
-        return redirect(url_for('index'))
-    
-    print(dish_id, order_id)
     Database.open(
             host='109.206.169.221', 
             user='seschool_01', 
             password='seschool_01', 
             database='seschool_01_pks1')
 
+    # Здесь вы можете добавить логику для добавления блюда в корзину
+    CartTable.add_to_cart(user_id=user_id, dish_id=dish_id)
 
-    DishToOrders.add_dish_to_order(dish_id=dish_id,order_id=order_id)
+    flash('Блюдо успешно добавлено в корзину!')
+    return redirect(url_for('show_cart'))
 
-    return redirect(url_for('add_dish_to_order', name=name, error=True))
+
+
+
+
 
 
 @app.route("/show_cart", methods=['GET','POST'])
@@ -165,29 +150,7 @@ def show_cart():
             password='seschool_01', 
             database='seschool_01_pks1')
 
-    order_id = DishToOrders.get_order_id(user_id)
-    print(user_id, order_id)
-
-
-    if order_id is None:
-        flash('Ошибка: Блюдо или заказ не найдены.')
-        return redirect(url_for('index'))
-    
-    order_id = order_id[0][0]
-    
-    print(order_id)
-    
-    Database.open(
-            host='109.206.169.221', 
-            user='seschool_01', 
-            password='seschool_01', 
-            database='seschool_01_pks1')
-
-    dishes = DishToOrders.show_cart(order_id)
-    print("User ID:", user_id)
-    print("Order ID:", order_id)
-    print("Dishes:", dishes)
-
+    dishes = CartTable.get_dishes_from_user(user_id)
     return render_template("show_cart.html", dishes=dishes)
 
     
@@ -208,6 +171,19 @@ def create_order():
         flash('Вы должны сначала войти в свой аккаунт, перед тем как заказать еду ')
         return redirect(url_for('login'))  # Перенаправление на страницу входа
 
+    Database.open(
+            host='109.206.169.221', 
+            user='seschool_01', 
+            password='seschool_01', 
+            database='seschool_01_pks1')
+
+
+    cart_dishes = CartTable.get_dishes_from_user(user_id)
+    if not cart_dishes:
+        flash('Ваша корзина пуста. Добавьте блюда перед оформлением заказа.')
+        return redirect(url_for('show_cart'))
+
+
     customer_name = request.form.get("customer_name")
     phone = request.form.get("phone")
     address = request.form.get("address")
@@ -223,10 +199,17 @@ def create_order():
             database='seschool_01_pks1')
 
     
-    OrdersTable.create_new_order(user_id=user_id, customer_name=customer_name, phone=phone, address=address, 
+    order_id = OrdersTable.create_new_order(user_id=user_id, customer_name=customer_name, phone=phone, address=address, 
                                  delivery_time=delivery_time, 
                                  payment_method=payment_method,
                                  status=status)
+    
+    for dish in cart_dishes:
+        CartTable.add_dish_to_order(order_id, dish["dish_id"])
+
+    # Очистите корзину после оформления заказа
+    CartTable.clear_cart(user_id)
+
     
     flash("Заказ успешно оформлен!")
     return redirect(url_for('index', error=True))
