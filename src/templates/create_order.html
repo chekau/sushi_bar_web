@@ -17,6 +17,10 @@
     enctype="multipart/form-data"
     class="add_menu_form"
     >
+    {% for message in get_flashed_messages() %}
+        <div class="error_message">{{ message }}</div>
+        {% endfor %}
+
 
     <div class="form_group">
         <label for="customer_name">Имя получателя</label>
