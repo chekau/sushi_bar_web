@@ -38,6 +38,21 @@ class Database:
         result = cls.__cursor.fetchall()
         return result
     
+    @classmethod
+    def get_connection(cls):
+        if cls.__conection is None:
+            cls.connect()
+        return cls.__conection
+    
+    @classmethod
+    def execute(cls, query, params=None):
+        connection = cls.get_connection()
+
+        with connection.cursor() as cursor:
+            cursor.execute(query, params)
+            connection.commit()  # Подтверждаем изменения, если это DML-запрос
+            return cursor.fetchall()  # Возвращаем результат, если это 
+    
     
     
     @classmethod
@@ -217,23 +232,23 @@ class CartTable:
 
     @staticmethod
     def clear_cart(user_id):
-
-    # Удаляем все блюда из корзины для данного пользователя
-        Database.fetchall(
-        "DELETE FROM Cart WHERE user_id = %s",
-        (user_id,)
-    )
-
+        connection = Database.get_connection()
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT * FROM Cart WHERE user_id = %s", (user_id,))
+            items = cursor.fetchall()  # Получаем все элементы в корзине
+            
+            cursor.execute("DELETE FROM Cart WHERE user_id = %s", (user_id,))
+            connection.commit()
+            
+            return items
 
 class DishToOrders:
     @staticmethod
     def add_dish_to_order(order_id, dish_id, quantity):
 
-
-        # Добавляем блюдо в заказ
         sql = "INSERT INTO DishToOrders (`order_id`, `dish_id`, `quantity`) VALUE (%s,%s,%s)"
         values = (order_id, dish_id, quantity)
-        Database.fetchall(sql,values)
+        Database.query(sql,values)
 
 
    

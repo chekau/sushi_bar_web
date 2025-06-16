@@ -183,6 +183,7 @@ def create_order():
     print(order_id)
     print(user_id)
     print(cart_dishes)
+    order_id = order_id[0][0]
 
 
     for dish in cart_dishes:
@@ -272,3 +273,6 @@ def logout():
 
 app.run(debug=True, port=8080)
 
+@app.teardown_appcontext
+def close_database(exception=None):
+    Database.close()
