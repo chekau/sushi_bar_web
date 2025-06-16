@@ -30,6 +30,20 @@ body {
 }
 
 
+.sidebar {
+    height: 80px;
+    background-color: red;
+    border-radius: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    width: 80%;
+    min-width: 320px;
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
 
 .dish_image {
    
@@ -122,12 +136,13 @@ body {
     text-decoration: none;
     background-color: white;
     box-shadow: 3px;
+    transition: transform 0.2s; /* Плавный переход при наведении */
     
 }
 
 
 .dish_card:hover {
-    transform: scale(1.05); /* Увеличение карточки при наведении */
+    transform: scale(1.02); /* Увеличение карточки при наведении */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Тень при наведении */
 }
 
@@ -194,11 +209,6 @@ button[type="submit"]:hover {
 
 
 
-
-
-
-
-
 .form_group {
     width: 100%;
     max-width: 435px;
@@ -209,11 +219,28 @@ button[type="submit"]:hover {
 } 
 
 
+.filter_buttons {
+    margin-bottom: 20px;
+}
+
+.filter_buttons button {
+    margin-right: 10px;
+    padding: 10px;
+    background-color: #e2e2e2;
+    border: none;
+    cursor: pointer;
+}
+
+.filter_buttons button:hover {
+    background-color: #d3d3d3;
+}
+
+
 
 
 .header_button_price {
     height: 50px;
-    width: 200px;
+    width: 300px;
     background-color: red;
     border-radius: 10px;
     color: white;
@@ -235,6 +262,10 @@ button[type="submit"]:hover {
     text-align: center;
 
 }
+/* Эффект при наведении на кнопку */
+.header_button[type="submit"]:hover {
+    background: #1a54c6;
+}
 
 
 
@@ -254,37 +285,7 @@ button[type="submit"]:hover {
     margin-top: auto; /* Отодвигает кнопку вниз */
 }
 
-.sidebar {
-    width: 300px;
-    background-color: #f4f4f4;
-    margin-right: 1700px;
-    position: fixed;
-    height: 1500px;
-    overflow-y: auto; /* Прокрутка по вертикали */
-}
 
-.sidebar ul {
-    list-style-type: none; /* Убираем маркеры списка */
-    padding: 0; /* Убираем отступы */
-}
-
-.sidebar ul li {
-    margin: 10px ; /* Отступы между элементами списка */
-    font-size: 40px;
-    border: #333;
-}
-
-.sidebar ul li a {
-    text-decoration: none; /* Убираем подчеркивание */
-    color: #333; /* Цвет текста */
-    display: block; /* Блоковый элемент для удобства */
-    padding: 10px; /* Отступы внутри ссылки */
-    border-radius: 5px; /* Скругление углов */
-}
-
-.sidebar ul li a:hover {
-    background-color: red
-}
 
 
 .flash-messages {
@@ -314,4 +315,221 @@ button[type="submit"]:hover {
 @keyframes fadeOut {
     from { opacity: 1; }
     to { opacity: 0; }
+}
+
+
+.basket {
+    max-width: 700px; /* Максимальная ширина корзины */
+    margin: 40px auto; /* Центрирование корзины */
+    padding: 20px; /* Внутренние отступы */
+    border-radius: 10px; /* Закругленные углы */
+    background-color: #fff; /* Белый фон */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Легкая тень */
+    transition: transform 0.2s; /* Плавный переход при наведении */
+}
+
+.basket:hover {
+    transform: scale(1.02); /* Увеличение при наведении */
+}
+
+.basket h1 {
+    text-align: center; /* Заголовок по центру */
+    color: #333; /* Цвет заголовка */
+    margin-bottom: 20px; /* Отступ снизу */
+}
+
+.basket-list {
+    list-style-type: none; /* Убираем маркеры списка */
+    padding: 0; /* Убираем отступы */
+}
+
+.basket-item {
+    display: flex; /* Используем флексбокс для элементов списка */
+    justify-content: space-between; /* Распределяем элементы по краям */
+    padding: 15px; /* Внутренние отступы для каждого элемента */
+    border-bottom: 1px solid #eee; /* Разделительная линия между элементами */
+    transition: background-color 0.2s; /* Плавный переход цвета фона */
+}
+
+.basket-item:hover {
+    background-color: #f9f9f9; /* Изменение цвета фона при наведении */
+}
+
+.basket-item:last-child {
+    border-bottom: none; /* Убираем линию у последнего элемента */
+}
+
+
+
+
+
+
+
+@media (max-width: 768px) {
+    .main {
+        width: 95%; /* Увеличиваем ширину на мобильных устройствах */
+        padding: 10px; /* Добавляем отступы */
+    }
+
+    .header, .sidebar {
+        flex-direction: column; /* Изменяем направление на вертикальное */
+        align-items: flex-start; /* Выравнивание элементов по началу */
+        padding: 10px; /* Уменьшаем внутренние отступы */
+        height: auto; /* Позволяем высоте автоматически подстраиваться под содержимое */
+        margin-bottom: 10px; /* Увеличиваем отступ между элементами */
+    }
+
+    .header {
+        justify-content: space-between; /* Распределяем элементы по краям */
+    }
+
+    .sidebar {
+        justify-content: space-between; /* Распределяем элементы по краям */
+    }
+}
+
+@media (max-width: 480px) {
+    .header, .sidebar {
+        width: 100%; /* Задаем ширину в 100% для небольших экранов */
+        padding-left: 10px; /* Уменьшаем отступы */
+        padding-right: 10px; /* Уменьшаем отступы */
+        font-size: 0.9rem; /* Уменьшаем размер шрифта для мобильных устройств */
+    }
+}
+
+@media (max-width: 768px) {
+    .dish {
+        flex-direction: column; /* Изменяем направление на вертикальное */
+        align-items: center; /* Центрируем элементы */
+        width: auto; /* Устанавливаем ширину в auto для лучшей адаптивности */
+        padding: 20px; /* Уменьшаем отступы */
+        gap: 20px; /* Уменьшаем промежутки между элементами */
+        margin-top: 30px; /* Уменьшаем верхний отступ */
+    }
+
+    .dish_card {
+        max-width: 90%; /* Увеличиваем максимальную ширину карточек на мобильных устройствах */
+        margin-right: 0; /* Убираем правый отступ */
+        margin-bottom: 20px; /* Добавляем нижний отступ между карточками */
+        height: auto; /* Позволяем высоте автоматически подстраиваться под содержимое */
+    }
+}
+
+@media (max-width: 480px) {
+    .dish_name {
+        font-size: 24px; /* Уменьшаем размер шрифта для названия блюда */
+    }
+
+    .dish_describtion {
+        font-size: 16px; /* Уменьшаем размер шрифта для описания блюда */
+    }
+
+    .dish_price {
+        font-size: 20px; /* Уменьшаем размер шрифта для цены */
+        margin-top: 50px; /* Уменьшаем верхний отступ */
+    }
+
+    .dish_image {
+        width: 200px; /* Уменьшаем размер изображения блюда */
+        height: 200px; /* Уменьшаем размер изображения блюда */
+    }
+}
+
+
+
+@media (max-width: 768px) {
+    .form_group input[type="text"],
+    .form_group input[type="password"],
+    .form_group input[type="repeat_password"],
+    button[type="submit"] {
+        padding: 10px; /* Уменьшаем отступы для меньших экранов */
+        font-size: 0.9rem; /* Уменьшаем размер шрифта */
+    }
+
+    .log_form p {
+        margin-top: 20px; /* Уменьшаем отступ сверху */
+        font-size: 0.85rem; /* Уменьшаем размер шрифта для текста ссылки */
+    }
+}
+
+@media (max-width: 480px) {
+    .form_group input[type="text"],
+    .form_group input[type="password"],
+    .form_group input[type="repeat_password"],
+    button[type="submit"] {
+        padding: 8px; /* Дополнительно уменьшаем отступы для мобильных устройств */
+        font-size: 0.85rem; /* Дополнительно уменьшаем размер шрифта */
+    }
+
+    .log_form p {
+        margin-top: 15px; /* Уменьшаем отступ сверху для текста ссылки */
+        font-size: 0.8rem; /* Уменьшаем размер шрифта для текста ссылки */
+    }
+}
+
+
+@media (max-width: 480px) {
+    .form_group {
+        padding: 20px 15px; /* Дополнительно уменьшаем отступы для мобильных устройств */
+    }
+
+    .filter_buttons button {
+        width: 100%; /* Кнопки занимают всю ширину контейнера */
+        margin-bottom: 10px; /* Добавляем отступ между кнопками */
+        margin-right: 0; /* Убираем правый отступ */
+    }
+
+    .header_button_price {
+        font-size: 16px; /* Дополнительно уменьшаем размер шрифта */
+    }
+
+    .header_button {
+        font-size: 14px; /* Дополнительно уменьшаем размер шрифта */
+        padding: 3px; /* Уменьшаем отступы */
+    }
+
+    .back {
+        margin-right: 10px; /* Уменьшаем отступ для мобильных устройств */
+    }
+}
+
+
+@media (max-width: 768px) {
+    .basket {
+        margin: 20px; /* Уменьшаем отступы для меньших экранов */
+        padding: 15px; /* Уменьшаем внутренние отступы */
+        max-width: 90%; /* Ширина корзины увеличивается на мобильных устройствах */
+    }
+
+    .basket h1 {
+        font-size: 24px; /* Уменьшаем размер шрифта заголовка */
+        margin-bottom: 15px; /* Уменьшаем отступ снизу заголовка */
+    }
+
+    .basket-item {
+        padding: 10px; /* Уменьшаем отступы для элементов списка */
+        flex-direction: column; /* Переключаем на вертикальное расположение для мобильных устройств */
+        align-items: flex-start; /* Выравниваем элементы по левому краю */
+    }
+
+    .basket-item span {
+        margin-top: 5px; /* Добавляем отступ между элементами в корзине */
+    }
+}
+
+@media (max-width: 480px) {
+    .basket h1 {
+        font-size: 20px; /* Дополнительно уменьшаем размер шрифта заголовка */
+        margin-bottom: 10px; /* Уменьшаем отступ снизу заголовка */
+    }
+
+    .basket-item {
+        padding: 8px; /* Дальше уменьшаем отступы для элементов списка */
+    }
+
+    .flash-message {
+        font-size: 14px; /* Уменьшаем размер шрифта для сообщений */
+        padding: 10px; /* Уменьшаем внутренние отступы для сообщений */
+        margin-bottom: 5px; /* Уменьшаем отступ между сообщениями */
+    }
 }
