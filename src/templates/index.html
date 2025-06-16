@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
     <link rel="stylesheet" href="{{  url_for('static', filename='css/style.css')  }}">
     <title>Menu</title>
 </head>
@@ -62,7 +63,15 @@
       {% endif %}
     {% endwith %}
 
-
+    <h2>Категории блюд</h2>
+    <div class="filter_buttons">
+    <button onclick="filterDishes('Ролл')">Роллы</button>
+    <button onclick="filterDishes('Сет')">Сеты</button>
+    <button onclick="filterDishes('Онигири')">Онигири</button>
+    <button onclick="filterDishes('Запечённый')">Запечённые роллы</button>
+    <button onclick="filterDishes('Напиток')">Напитки</button>
+    <button onclick="filterDishes('all')">Показать все</button>
+    </div>
     
 
 
@@ -78,7 +87,7 @@
                 <div class="dish_table_row">
                     {% for dish in dish_group %}
 
-                    <div class="dish_card">
+                    <div class="dish_card" data-name="{{ dish.name|lower }}">
                         <a href="{{ url_for('get_dish', name=dish.name) }}" class="link_dish">
                         <div class="dish_card_info">
                         <h3>
@@ -110,7 +119,7 @@
                 {% endfor %}
                 </div>
                 {% endfor %}
-
+            
             </div>
 
     </div>
@@ -118,5 +127,7 @@
     
 
     </div>
+
+
 </body>
 </html>
