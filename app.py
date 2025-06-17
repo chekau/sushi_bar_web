@@ -50,6 +50,11 @@ def add_menu():
         image.save(image_path)
         image_filename = filename
 
+    print(f"Image Filename: {image_filename}")  # Отладочная информация
+    
+    # Проверяем перед сохранением
+    print(f"Adding dish with Name: {name}, Description: {describtion}, Image: {image_filename}, Price: {price}")
+    
     
     
     DishTable.add(name=name, describtion=describtion, image=image_filename, price=price)
@@ -64,42 +69,6 @@ def delete_dish(id):
     
     return redirect(url_for('index'))
 
-@app.route("/update_dish/<id>", methods=["GET","POST"])
-def update_dish(id): 
-    dish = DishTable.find_dish_by_id(id)
-    if dish is None:
-        abort(404, f"Article id {id} doesn't exist")
-
-    if request.method == "GET":
-        return render_template("update_dish.html", dish=dish)
-    
-    # Обработка POST-запроса
-    name = request.form.get("name")
-    if name is None:
-        name = dish.name
-
-    describtion = request.form.get("describtion")
-    if describtion is None:
-        describtion = dish.describtion
-
-    price = request.form.get("price")
-    if price is None:
-        price = dish.price
-
-    image_filename = None
-    image = request.files.get("image")
-    if image is not None and image.filename:
-        filename = secure_filename(image.filename)
-        image_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
-        image.save(image_path)
-        image_filename = filename
-    else:
-        # Если мы не задавали картинку для статьи,
-        # то надо взять старую из объекта article
-        filename = dish.image
-
-    DishTable.update_dish(id, name, describtion, image=image_filename,price=price)
-    return redirect(url_for('get_dish', name=name))
 
 
 
@@ -315,10 +284,6 @@ def logout():
     flash("Вы вышли из системы.")
     return redirect(url_for("index"))
 
-@app.route('/uploads/<filename>')
-def uploaded_photo(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
-    
 
 
 

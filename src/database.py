@@ -191,24 +191,6 @@ class DishTable:
         Database.fetchall("DELETE FROM Dish WHERE id = %s", [dish_id])
         return True
     
-    @staticmethod
-    def update_dish(id: int, name: str, describtion: str, image: str, price: int) -> bool:
-        # Если статьи с таким id нет, ничего не делаем и возвращаем False
-        if DishTable.find_dish_by_id(id) is None:
-            return False
-        
-        Database.execute(
-            """
-            UPDATE Dish
-            SET name = %s,
-                describtion = %s,
-                image = %s,
-                price = %s
-            WHERE id = %s
-            """,
-            [name, describtion,image, price, id]
-        )
-        return True
 
     
     
