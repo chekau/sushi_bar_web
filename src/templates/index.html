@@ -95,8 +95,11 @@
                         <a href="{{ url_for('get_dish', name=dish.name) }}" class="link_dish">
                         <div class="dish_card_info">
                         <h3>
-                        
-                            <img src="{{ url_for('static', filename='uploads/' + dish.image) }} " class="dish_image">
+                             {% if dish.image %}
+                            <img src="{{ url_for('static', filename='uploads/' + dish.image) }}" class="dish_image">
+                            {% else %}
+                            <img src="{{ url_for('static', filename='uploads/default_dish.jpg') }}" class="dish_image">
+                            {% endif %}
                         
 
 
