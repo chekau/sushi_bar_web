@@ -3,20 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <title>Корзина</title>
 </head>
 <body>
-    <h1>Ваш заказ:</h1>
-    <div class="basket">
-        {% if dishes %}
-            <ul>
-                {% for dish in dishes %}
-                    <li>{{ dish.name }} - {{ dish.price }} - {{  dish.quantity  }} шт.</li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p>Ваша корзина пуста.</p>
-        {% endif %}
-    </div>
+<h1>Ваш заказ:</h1>
+<div class="basket">
+    {% if dishes %}
+        <div class="basket-grid">
+            {% for dish in dishes %}
+                <div class="basket-card">
+                    <div class="dish-info">
+                        <span class="dish-name">{{ dish.name }}</span>
+                        <span class="dish-price">{{ dish.price }} руб.</span>
+                        <span class="dish-quantity">{{ dish.quantity }} шт.</span>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="basket-total">
+            <strong>Итого руб.</strong>
+        </div>
+    {% else %}
+        <p class="empty-basket">Ваша корзина пуста.</p>
+    {% endif %}
+</div>
+
 </body>
 </html>

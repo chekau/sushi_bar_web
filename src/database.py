@@ -143,6 +143,22 @@ class DishTable:
         return Dish(id, name, describtion, image, price)
     
     @staticmethod
+    def find_dish_by_id(dish_id: int):
+        dishes = Database.fetchall(
+            "SELECT * FROM Dish WHERE id = %s", [dish_id])
+        
+        if not id:
+            return None
+
+        if not dishes:
+            return None
+        
+        id, name, describtion, image, price = dishes[0]
+        return Dish(id, name, describtion, image, price)
+    
+
+    
+    @staticmethod
     def find_id_by_name(name: str):
         dish_id = Database.fetchall(
             "SELECT `id` FROM Dish WHERE name=%s", [name])
@@ -154,6 +170,48 @@ class DishTable:
             return None
         
         return dish_id
+    
+    @staticmethod
+    def find_dish_by_id(dish_id: int):
+        dishes = Database.fetchall(
+            "SELECT * FROM Dish WHERE id = %s", [dish_id])
+        
+        if not dishes:
+            return None
+        
+        id, name, describtion, image, price = dishes[0]
+        return Dish(id, name, describtion, image, price)
+    
+    @staticmethod
+    def delete_dish(dish_id: int) -> bool:
+         # Если статьи с таким id нет, ничего не делаем и возвращаем False
+        if DishTable.find_dish_by_id(dish_id) is None:
+            return False
+
+        Database.fetchall("DELETE FROM Dish WHERE id = %s", [dish_id])
+        return True
+    
+    @staticmethod
+    def update_dish(id: int, name: str, describtion: str, image: str, price: int) -> bool:
+        # Если статьи с таким id нет, ничего не делаем и возвращаем False
+        if DishTable.find_dish_by_id(id) is None:
+            return False
+        
+        Database.execute(
+            """
+            UPDATE Dish
+            SET name = %s,
+                describtion = %s,
+                image = %s,
+                price = %s
+            WHERE id = %s
+            """,
+            [name, describtion,image, price, id]
+        )
+        return True
+
+    
+    
     
         
     

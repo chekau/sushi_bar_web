@@ -181,6 +181,7 @@ button[type="submit"] {
     cursor: pointer;
     transition: background 0.3s ease;
     box-shadow: 0 4px 12px rgba(37, 117, 252, 0.4);
+    width: 500px;
 }
 
 /* Эффект при наведении на кнопку */
@@ -221,6 +222,7 @@ button[type="submit"]:hover {
 
 .filter_buttons {
     margin-bottom: 20px;
+    
 }
 
 .filter_buttons button {

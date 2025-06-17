@@ -49,7 +49,8 @@
                 </form>
             
             </div>
-        
+
+
         
             </div>
 
@@ -87,6 +88,9 @@
                 <div class="dish_table_row">
                     {% for dish in dish_group %}
 
+                    
+        
+
                     <div class="dish_card" data-name="{{ dish.name|lower }}">
                         <a href="{{ url_for('get_dish', name=dish.name) }}" class="link_dish">
                         <div class="dish_card_info">
@@ -107,18 +111,22 @@
                         <button class="header_button_price">
                                 {{dish.price}} ₽
 
-                        </button>   
-
+                        </button>
+                        
+                
                         </a>
+                        
         
                         </div>
-                        
-                        
+                
                     </div>
 
                 {% endfor %}
                 </div>
+
                 {% endfor %}
+
+
             
             </div>
 

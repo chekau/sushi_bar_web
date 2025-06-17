@@ -30,6 +30,7 @@ def initialize_database():
 
 
 
+
 @app.route("/add_menu", methods=["GET", "POST"])
 def add_menu():
     if request.method == "GET":
@@ -56,6 +57,51 @@ def add_menu():
     return redirect(url_for('add_menu', error=True))
 
 
+@app.route("/delete_dish/<id>", methods=["POST"])
+def delete_dish(id):
+    if not DishTable.delete_dish(id):
+        abort(404, f"Article id {id} doesn't exist")
+    
+    return redirect(url_for('index'))
+
+@app.route("/update_dish/<id>", methods=["GET","POST"])
+def update_dish(id): 
+    dish = DishTable.find_dish_by_id(id)
+    if dish is None:
+        abort(404, f"Article id {id} doesn't exist")
+
+    if request.method == "GET":
+        return render_template("update_dish.html", dish=dish)
+    
+    # Обработка POST-запроса
+    name = request.form.get("name")
+    if name is None:
+        name = dish.name
+
+    describtion = request.form.get("describtion")
+    if describtion is None:
+        describtion = dish.describtion
+
+    price = request.form.get("price")
+    if price is None:
+        price = dish.price
+
+    image_filename = None
+    image = request.files.get("image")
+    if image is not None and image.filename:
+        filename = secure_filename(image.filename)
+        image_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+        image.save(image_path)
+        image_filename = filename
+    else:
+        # Если мы не задавали картинку для статьи,
+        # то надо взять старую из объекта article
+        filename = dish.image
+
+    DishTable.update_dish(id, name, describtion, image=image_filename,price=price)
+    return redirect(url_for('get_dish', name=name))
+
+
 
 
 @app.route("/")
@@ -70,8 +116,10 @@ def index():
         groups.append(dishes[i:i + count_in_group])
     
     user_email = session.get('email')  
-    
-    return render_template("index.html",groups=groups,user_count=DishTable.get_count_of_users(),user_email=user_email)
+
+    return render_template("index.html",groups=groups,user_count=DishTable.get_count_of_users(),
+                           user_email=user_email,
+                           )
 
 
 @app.route("/choose")
@@ -112,8 +160,8 @@ def add_to_cart(dish_id):
 
     CartTable.add_to_cart(user_id=user_id, dish_id=dish_id)
 
-
-    return redirect(url_for('show_cart'))
+    flash("Товар успешно добавился в корзину")
+    return redirect(url_for('index'))
 
 
 
@@ -127,7 +175,6 @@ def show_cart():
         return render_template('show_cart.html',error=request.args.get("error"))
     
     user_id = session.get("id")
-    print(session)
     if user_id is None:
         flash('Вы должны сначала войти в свой аккаунт, перед тем как заказать еду ')
         return redirect(url_for('login'))  # Перенаправление на страницу входа
@@ -150,7 +197,6 @@ def create_order():
         return render_template('create_order.html',error=request.args.get("error"))
     
     user_id = session.get("id")
-    print(session)
     if user_id is None:
         flash('Вы должны сначала войти в свой аккаунт, перед тем как заказать еду ')
         return redirect(url_for('login'))  # Перенаправление на страницу входа
@@ -258,6 +304,7 @@ def login():
 
     session["id"] = user[0][0]
     session["email"] = email
+
     flash("Вы вошли в систему")
     return redirect(url_for("index"))  # или на главную
 
@@ -267,6 +314,10 @@ def logout():
     session.pop('email', None)
     flash("Вы вышли из системы.")
     return redirect(url_for("index"))
+
+@app.route('/uploads/<filename>')
+def uploaded_photo(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
     
 
 
