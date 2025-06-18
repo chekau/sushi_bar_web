@@ -7,8 +7,9 @@
     <title>Корзина</title>
 </head>
 <body>
-<h1>Ваш заказ:</h1>
+
 <div class="basket">
+    <h1>Ваш заказ:</h1>
     {% if dishes %}
         <div class="basket-grid">
             {% for dish in dishes %}
@@ -20,9 +21,6 @@
                     </div>
                 </div>
             {% endfor %}
-        </div>
-        <div class="basket-total">
-            <strong>Итого руб.</strong>
         </div>
     {% else %}
         <p class="empty-basket">Ваша корзина пуста.</p>

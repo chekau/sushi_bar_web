@@ -50,8 +50,14 @@
             
             </div>
 
+            <div class="admin_panel">
+            <form action="{{ url_for('add_menu') }}" method="get">
+                <button>
+                    Добавить меню
+                </button>
+            </form>
+            </div>
 
-        
             </div>
 
            {% with messages = get_flashed_messages() %}
@@ -73,23 +79,16 @@
     <button onclick="filterDishes('Напиток')">Напитки</button>
     <button onclick="filterDishes('all')">Показать все</button>
     </div>
-    
-
 
 
     <div class="dish_list">
         <h1>Доступное меню:</h1>
-
-
 
             <div class="dish_table">
                 {% for dish_group in groups %}
 
                 <div class="dish_table_row">
                     {% for dish in dish_group %}
-
-                    
-        
 
                     <div class="dish_card" data-name="{{ dish.name|lower }}">
                         <a href="{{ url_for('get_dish', name=dish.name) }}" class="link_dish">
@@ -101,17 +100,13 @@
                             <img src="{{ url_for('static', filename='uploads/default_dish.jpg') }}" class="dish_image">
                             {% endif %}
                         
-
-
                         </h3>
-                        
-
                         
                            <b> <h4>{{dish.name}}</h4> </b>
                         
                         
                         
-                        <button class="header_button_price">
+                          <button class="header_button_price">
                                 {{dish.price}} ₽
 
                         </button>
@@ -129,16 +124,11 @@
 
                 {% endfor %}
 
-
-            
             </div>
 
     </div>
     
-    
-
     </div>
-
 
 </body>
 </html>

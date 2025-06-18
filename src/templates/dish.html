@@ -7,6 +7,7 @@
     <title>Блюдо</title>
 </head>
 <body>
+
     <div class="dish">
 
         <div class="dish_image_info">
@@ -38,24 +39,10 @@
                 {{dish.describtion}}
             </div>
 
-            <form action="{{ url_for('delete_dish', id=dish.id) }}" method="post">
-                            <button
-                                type="submit"
-                                onclick="return confirm('Вы уверены, что хотите удалить статью?')"
-                            >
-                                Удалить
-                            </button>
-            </form>
-
-
-        
-         
-            
-        
+     
             <div class="dish_dop_info">
 
              
-           
 
                 <div class="add_cart">
                 <form action="{{ url_for('add_to_cart', dish_id=dish.id) }}" method="POST">

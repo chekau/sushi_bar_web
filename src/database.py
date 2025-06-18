@@ -4,7 +4,6 @@ from src.config import CONFIG
 import hashlib
 
 
-
 class Database: 
     __conection = None
     @classmethod
@@ -91,7 +90,6 @@ class Database:
             return False
         return True
 
-    
 
 class DishTable:
     @classmethod
@@ -190,13 +188,6 @@ class DishTable:
 
         Database.fetchall("DELETE FROM Dish WHERE id = %s", [dish_id])
         return True
-    
-
-    
-    
-    
-        
-    
 
 
 class OrdersTable:
@@ -231,7 +222,6 @@ class OrdersTable:
         return order_id
     
 
-
 class CartTable:
     @staticmethod
     def add_to_cart(user_id,dish_id, quantity=1):
@@ -255,7 +245,6 @@ class CartTable:
             "INSERT INTO Cart (user_id, dish_id, quantity) VALUES (%s, %s, %s)",
             (user_id, dish_id, quantity)
         )
-
 
 
     @staticmethod

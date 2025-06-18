@@ -68,6 +68,7 @@ body {
     background-color: red;
     margin-top: 70px;
     border-radius: 20px;
+    transition: transform 0.2s; /* Плавный переход при наведении */
 }
 
 .dish_image_detail {
@@ -376,6 +377,9 @@ basket {
     color: #999;
 }
 
+.admin_panel {
+    background-color: red;
+}
 
 
 

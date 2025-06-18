@@ -28,9 +28,6 @@ os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 def initialize_database():
     Database.open()
 
-
-
-
 @app.route("/add_menu", methods=["GET", "POST"])
 def add_menu():
     if request.method == "GET":
@@ -49,18 +46,9 @@ def add_menu():
         image_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
         image.save(image_path)
         image_filename = filename
-
-    print(f"Image Filename: {image_filename}")  # Отладочная информация
-    
-    # Проверяем перед сохранением
-    print(f"Adding dish with Name: {name}, Description: {describtion}, Image: {image_filename}, Price: {price}")
-    
-    
-    
     DishTable.add(name=name, describtion=describtion, image=image_filename, price=price)
    
     return redirect(url_for('add_menu', error=True))
-
 
 @app.route("/delete_dish/<id>", methods=["POST"])
 def delete_dish(id):
@@ -68,10 +56,6 @@ def delete_dish(id):
         abort(404, f"Article id {id} doesn't exist")
     
     return redirect(url_for('index'))
-
-
-
-
 
 @app.route("/")
 @app.route("/index")
@@ -90,7 +74,6 @@ def index():
                            user_email=user_email,
                            )
 
-
 @app.route("/choose")
 def choose():
     return render_template("choose.html")
@@ -103,8 +86,6 @@ def client_side():
 def admin_side():
     return render_template("admin_side.html")
 
-
-
 @app.route("/dish/<name>")
 def get_dish(name):
     dish = DishTable.find_dish_by_name(name)
@@ -115,8 +96,6 @@ def get_dish(name):
         "dish.html",
         dish=dish
         )
-
-
 
 @app.route("/add_to_cart/<dish_id>", methods=["GET","POST"])
 def add_to_cart(dish_id):
@@ -131,12 +110,6 @@ def add_to_cart(dish_id):
 
     flash("Товар успешно добавился в корзину")
     return redirect(url_for('index'))
-
-
-
-
-
-
 
 @app.route("/show_cart", methods=['GET','POST'])
 def show_cart():
@@ -153,12 +126,6 @@ def show_cart():
     dishes = CartTable.get_dishes_from_user(user_id)
     return render_template("show_cart.html", dishes=dishes)
 
-    
-    
-
-
-
-
 
 @app.route('/create_order', methods=['GET', 'POST'])
 def create_order():
@@ -169,8 +136,6 @@ def create_order():
     if user_id is None:
         flash('Вы должны сначала войти в свой аккаунт, перед тем как заказать еду ')
         return redirect(url_for('login'))  # Перенаправление на страницу входа
-
-
 
 
     cart_dishes = CartTable.get_dishes_from_user(user_id)
@@ -186,9 +151,7 @@ def create_order():
     payment_method = request.form.get("payment_method")
     status = request.form.get("status")  
 
-    
-
-    
+        
     OrdersTable.create_new_order(user_id=user_id, customer_name=customer_name, phone=phone, address=address, 
                                   delivery_time=delivery_time, 
                                  payment_method=payment_method,
@@ -210,10 +173,6 @@ def create_order():
     
     flash("Заказ успешно оформлен!")
     return redirect(url_for('index', error=True))
-
-
-
-
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -246,7 +205,6 @@ def register():
     flash("Регистрация прошла успешно. Войдите в систему.")
     return redirect(url_for("login"))
 
-
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "GET":
@@ -258,7 +216,6 @@ def login():
     if not email or not password:
         flash("Введите почту и пароль")
         return redirect(request.url)
-
 
 
     user = Database.fetchall("SELECT * FROM Users WHERE email = %s", (email,))
@@ -283,9 +240,6 @@ def logout():
     session.pop('email', None)
     flash("Вы вышли из системы.")
     return redirect(url_for("index"))
-
-
-
 
 app.run(debug=True, port=8080)
 
